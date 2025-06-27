@@ -5,8 +5,6 @@ import { GiTakeMyMoney } from "react-icons/gi";
 import { FaCalculator, FaSquareRootAlt, FaInfinity, FaChartLine, FaPrint, FaQuoteLeft, FaAward } from "react-icons/fa";
 import { MdFunctions, MdVideoLibrary, MdSchool } from "react-icons/md";
 import { TbMathSymbols, TbMathIntegral, TbCertificate } from "react-icons/tb";
-import { BsCheckCircleFill } from "react-icons/bs";
-import Link from 'next/link';
 
 const Hero = () => {
     return (
