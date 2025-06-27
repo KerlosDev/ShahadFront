@@ -29,10 +29,9 @@ const abrilFatface = Abril_Fatface({
   subsets: ['latin'],
   weight: '400', // Adjust based on the font options
 });
-
 export const metadata = {
-  title: "حسام ميرا رياضيات | Hossam Mira Math",
-  description: " شرح وحل تمارين مادة الرياضيات لطلاب الصفوف الثانوية الثلاثة بكل بساطة ",
+  title: "Shahad Hany | شهد هاني",
+  description: "هدف منصتنا ان نخلي الكيمياء مجرد لعبة بالنسبالك ❤️",
 };
 
 export default function RootLayout({ children }) {
