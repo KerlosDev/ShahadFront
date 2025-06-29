@@ -1,6 +1,6 @@
 // Dynamic sitemap.xml for Next.js App Router
 export async function GET() {
-  const baseUrl = 'https://hossame-front.vercel.app'; // Change to your actual domain
+  const baseUrl = 'https://www.shahadhany.site'; // Change to your actual domain
   const pages = [
     '',
     'admin',
