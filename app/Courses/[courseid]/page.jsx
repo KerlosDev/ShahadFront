@@ -200,7 +200,7 @@ const CoursePage = () => {
                     }
                 );
 
-
+            
             } catch (error) {
                 console.error('❌ خطأ في تسجيل المشاهدة:', error);
             }
@@ -279,7 +279,7 @@ const CoursePage = () => {
                                     <span className="text-blue-400">كورس {courseInfo.level || "تعليمي"}</span>
                                 </div>
                                 <h1 className="text-4xl font-bold text-white">{courseInfo.nameofcourse}</h1>
-                                <p className="text-gray-400 text-lg">{courseInfo.description}</p>
+                                <pre className="text-gray-400 text-lg whitespace-pre-line" style={{fontFamily: 'inherit', background: 'none', border: 'none', padding: 0, margin: 0}}>{courseInfo.description}</pre>
                                 <div className="flex items-center gap-4">
                                     <div className="flex items-center gap-2">
                                         <img src="/prof.jpg"
@@ -312,27 +312,26 @@ const CoursePage = () => {
                     {/* Main Content */}
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         {/* Video Section */}
-                        <div className="lg:col-span-2 space-y-6">
-                            <div className="relative w-full h-auto rounded-xl overflow-hidden bg-gray-900">
-                                {currentVideoUrl && !isContentLocked && isReady ? (
-                                    <VideoPlayer
-                                        videoUrl={currentVideoUrl}
-                                    />
-                                ) : (
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                        <div className="text-center">
-                                            <FaLock className="text-4xl text-gray-600 mx-auto mb-4" />
-                                            <p className="text-gray-400">
-                                                {!user ? "قم بتسجيل الدخول للوصول إلى المحتوى" :
-                                                    !isEnrolled ? "اشترك في الكورس للوصول إلى المحتوى" :
-                                                        !currentVideoUrl && courseVideoChapters.length > 0 ? "لا يوجد فيديو متاح لهذا الدرس" :
-                                                            courseVideoChapters.length === 0 ? "لا يوجد دروس متاحة حالياً" :
-                                                                "اختر درساً للمشاهدة"}
-                                            </p>
-                                        </div>
+                        <div className="lg:col-span-2 space-y-6">                            <div className="relative aspect-video rounded-xl overflow-hidden bg-gray-900">
+                            {currentVideoUrl && !isContentLocked && isReady ? (
+                                <VideoPlayer
+                                    videoUrl={currentVideoUrl}
+                                ></VideoPlayer>
+                            ) : (
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <div className="text-center">
+                                        <FaLock className="text-4xl text-gray-600 mx-auto mb-4" />
+                                        <p className="text-gray-400">
+                                            {!user ? "قم بتسجيل الدخول للوصول إلى المحتوى" :
+                                                !isEnrolled ? "اشترك في الكورس للوصول إلى المحتوى" :
+                                                    !currentVideoUrl && courseVideoChapters.length > 0 ? "لا يوجد فيديو متاح لهذا الدرس" :
+                                                        courseVideoChapters.length === 0 ? "لا يوجد دروس متاحة حالياً" :
+                                                            "اختر درساً للمشاهدة"}
+                                        </p>
                                     </div>
-                                )}
-                            </div>
+                                </div>
+                            )}
+                        </div>
 
                             {/* Chapter and Lesson Info */}
                             <div className="bg-gray-800/50 rounded-xl p-6">
