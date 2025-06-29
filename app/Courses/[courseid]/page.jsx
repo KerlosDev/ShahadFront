@@ -279,7 +279,7 @@ const CoursePage = () => {
                                     <span className="text-blue-400">كورس {courseInfo.level || "تعليمي"}</span>
                                 </div>
                                 <h1 className="text-4xl font-bold text-white">{courseInfo.nameofcourse}</h1>
-                                <p className="text-gray-400 text-lg">{courseInfo.description}</p>
+                                <pre className="text-gray-400 text-lg whitespace-pre-line" style={{ fontFamily: 'inherit', background: 'none', border: 'none', padding: 0, margin: 0 }}>{courseInfo.description}</pre>
                                 <div className="flex items-center gap-4">
                                     <div className="flex items-center gap-2">
                                         <img src="/prof.jpg"
