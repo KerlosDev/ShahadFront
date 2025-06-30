@@ -30,7 +30,7 @@ const abrilFatface = Abril_Fatface({
   weight: '400', // Adjust based on the font options
 });
 export const metadata = {
-  title: "Walter White  | والتر وايت",
+  title: "Shahad Hany | شهد هاني",
   description: "هدف منصتنا ان نخلي الكيمياء مجرد لعبة بالنسبالك ❤️",
 };
 

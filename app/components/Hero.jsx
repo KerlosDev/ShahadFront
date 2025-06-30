@@ -70,7 +70,7 @@ const Hero = () => {
                                                      bg-gradient-to-l from-blue-600 via-purple-600 to-blue-800 
                                                      bg-clip-text text-transparent font-bold 
                                                      drop-shadow-lg group-hover:scale-105 transition-transform duration-300">
-                                            والتر وايت
+                                            شهد هاني
                                         </h1>                                        <div className="hidden sm:flex w-12 h-12 bg-gradient-to-br from-yellow-500/30 to-red-500/30 
                                                       rounded-full items-center justify-center group-hover:scale-110 
                                                       transition-transform duration-300">
