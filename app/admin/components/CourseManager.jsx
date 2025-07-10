@@ -39,7 +39,9 @@ const CourseManager = () => {
     });
     const [newLesson, setNewLesson] = useState({
         title: '',
-        videoUrl: ''
+        videoUrl: '',
+        fileName: '',
+        fileUrl: '',
     });
     const [chapterLoading, setChapterLoading] = useState(false);
     const [lessonLoading, setLessonLoading] = useState(false);
@@ -360,7 +362,9 @@ const CourseManager = () => {
 
         const newLessonObj = {
             title: lessonInput.title,
-            videoUrl: lessonInput.videoUrl
+            videoUrl: lessonInput.videoUrl,
+            fileName: lessonInput.fileName || '',
+            fileUrl: lessonInput.fileUrl || '',
         };
 
         try {
@@ -371,7 +375,7 @@ const CourseManager = () => {
 
             setLessonInputs(prev => ({
                 ...prev,
-                [chapterId]: { title: '', videoUrl: '' }
+                [chapterId]: { title: '', videoUrl: '', fileName: '', fileUrl: '' }
             }));
         } catch (error) {
             console.error('Error adding lesson:', error);
@@ -566,7 +570,7 @@ const CourseManager = () => {
                             isCompleted={currentStep > 2}
                         />
                         <div className="w-12 h-0.5 bg-gray-700" />
-                        
+
                     </div>
 
                     {/* Mobile Step Indicators */}
@@ -1062,7 +1066,7 @@ const CourseManager = () => {
                                                                 ))}
 
                                                                 {/* Add Lesson Form */}
-                                                                <div className="flex gap-2">
+                                                                <div className=" grid grid-rows-1 gap-2">
                                                                     <input
                                                                         type="text"
                                                                         value={lessonInputs[chapter._id]?.title || ''}
@@ -1077,12 +1081,26 @@ const CourseManager = () => {
                                                                         placeholder="رابط الفيديو"
                                                                         className="flex-1 p-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm"
                                                                     />
+                                                                    <input
+                                                                        type="text"
+                                                                        value={lessonInputs[chapter._id]?.fileName || ''}
+                                                                        onChange={(e) => setLessonInputs(prev => ({ ...prev, [chapter._id]: { ...prev[chapter._id], fileName: e.target.value } }))}
+                                                                        placeholder="اسم الملف (اختياري)"
+                                                                        className="flex-1 p-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm"
+                                                                    />
+                                                                    <input
+                                                                        type="text"
+                                                                        value={lessonInputs[chapter._id]?.fileUrl || ''}
+                                                                        onChange={(e) => setLessonInputs(prev => ({ ...prev, [chapter._id]: { ...prev[chapter._id], fileUrl: e.target.value } }))}
+                                                                        placeholder="رابط الملف (اختياري)"
+                                                                        className="flex-1 p-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm"
+                                                                    />
                                                                     <button
                                                                         type="button"
                                                                         onClick={() => handleAddLesson(chapter._id)}
-                                                                        className="p-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-lg transition-colors"
+                                                                        className="p-2 flex place-items-center w-fit bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-lg transition-colors"
                                                                     >
-                                                                        <FaPlus size={14} />
+                                                                        <FaPlus size={14} />اضافة
                                                                     </button>
                                                                 </div>
                                                             </div>
@@ -1359,20 +1377,34 @@ const CourseManager = () => {
                 <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
                     <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl w-full max-w-md border border-white/10 shadow-2xl p-6">
                         <h3 className="text-xl font-arabicUI3 text-white mb-4">تعديل الدرس</h3>
-                        <div className="space-y-4">
+                        <div className="space-y-4  ">
                             <input
                                 type="text"
-                                value={editingLesson.title}
+                                value={editingLesson.title || ""}
                                 onChange={(e) => setEditingLesson({ ...editingLesson, title: e.target.value })}
                                 className="w-full p-3 bg-white/5 border border-white/10 rounded-xl text-white"
                                 placeholder="عنوان الدرس"
                             />
                             <input
                                 type="text"
-                                value={editingLesson.videoUrl}
+                                value={editingLesson.videoUrl || ""}
                                 onChange={(e) => setEditingLesson({ ...editingLesson, videoUrl: e.target.value })}
                                 className="w-full p-3 bg-white/5 border border-white/10 rounded-xl text-white"
                                 placeholder="رابط الفيديو"
+                            />
+                            <input
+                                type="text"
+                                value={editingLesson.fileName || ""}
+                                onChange={(e) => setEditingLesson({ ...editingLesson, fileName: e.target.value })}
+                                className="w-full p-3 bg-white/5 border border-white/10 rounded-xl text-white"
+                                placeholder="اسم الملف (اختياري)"
+                            />
+                            <input
+                                type="text"
+                                value={editingLesson.fileUrl || ""}
+                                onChange={(e) => setEditingLesson({ ...editingLesson, fileUrl: e.target.value })}
+                                className="w-full p-3 bg-white/5 border border-white/10 rounded-xl text-white"
+                                placeholder="رابط الملف (اختياري)"
                             />
                             <div className="flex justify-end gap-3">
                                 <button

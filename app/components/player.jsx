@@ -15,8 +15,6 @@ const VideoPlayer = ({ videoUrl }) => {
   };
 
   const videoId = getYouTubeId(videoUrl);
-  // Detect if the video is YouTube and set aspect ratio accordingly
-  const aspectClass = videoId ? 'aspect-w-3 aspect-h-4' : 'aspect-w-16 aspect-h-9';
 
   useEffect(() => {
     if (typeof window !== 'undefined' && videoId && containerRef.current) {
@@ -64,7 +62,7 @@ const VideoPlayer = ({ videoUrl }) => {
   }
 
   return (
-    <div ref={containerRef} className={`${aspectClass} w-full h-full`} />
+    <div ref={containerRef} className="aspect-w-16 aspect-h-9" />
   );
 };
 

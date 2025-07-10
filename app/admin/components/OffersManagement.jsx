@@ -95,7 +95,7 @@ const OfferModal = memo(({ isEdit, onSubmit, onClose, currentStep, steps, formDa
                                                 value={formData.title}
                                                 onChange={(e) => onFormChange('title', e.target.value)}
                                                 className={`w-full px-4 py-3 bg-white/5 border ${formErrors.title ? 'border-red-500' : 'border-white/10'} rounded-xl text-white`}
-                                                placeholder="مثال: عرض خاص - مجموعة إتقان الكيمياء"
+                                                placeholder="مثال: عرض خاص - مجموعة إتقان الرياضيات"
                                             />
                                             {formErrors.title && <p className="text-red-500 text-sm">{formErrors.title}</p>}
                                         </div>
@@ -106,7 +106,7 @@ const OfferModal = memo(({ isEdit, onSubmit, onClose, currentStep, steps, formDa
                                                 value={formData.subtitle}
                                                 onChange={(e) => onFormChange('subtitle', e.target.value)}
                                                 className={`w-full px-4 py-3 bg-white/5 border ${formErrors.subtitle ? 'border-red-500' : 'border-white/10'} rounded-xl text-white`}
-                                                placeholder="مثال:  والتر وايت تقدم"
+                                                placeholder="مثال: حسام ميرة يقدم"
                                             />
                                             {formErrors.subtitle && <p className="text-red-500 text-sm">{formErrors.subtitle}</p>}
                                         </div>
@@ -126,9 +126,9 @@ const OfferModal = memo(({ isEdit, onSubmit, onClose, currentStep, steps, formDa
                                                 onChange={(e) => onFormChange('section', e.target.value)}
                                                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white"
                                             >
-                                                <option value="FIRST_SEC">الصف الأول الثانوي</option>
-                                                <option value="SECOND_SEC">الصف الثاني الثانوي</option>
-                                                <option value="THIRD_SEC">الصف الثالث الثانوي</option>
+                                                <option className='text-black' value="FIRST_SEC">الصف الأول الثانوي</option>
+                                                <option className='text-black' value="SECOND_SEC">الصف الثاني الثانوي</option>
+                                                <option className='text-black' value="THIRD_SEC">الصف الثالث الثانوي</option>
                                             </select>
                                         </div>
                                         <div className="space-y-4">
@@ -138,9 +138,9 @@ const OfferModal = memo(({ isEdit, onSubmit, onClose, currentStep, steps, formDa
                                                 onChange={(e) => onFormChange('stage', e.target.value)}
                                                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white"
                                             >
-                                                <option value="DRAFT">مسودة</option>
-                                                <option value="PUBLISHED">نشر</option>
-                                                <option value="ARCHIVED">أرشيف</option>
+                                                <option className='text-black' value="DRAFT">مسودة</option>
+                                                <option className='text-black' value="PUBLISHED">نشر</option>
+                                                <option className='text-black' value="ARCHIVED">أرشيف</option>
                                             </select>
                                         </div>
                                     </div>

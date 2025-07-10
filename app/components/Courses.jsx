@@ -221,7 +221,7 @@ const Courses = () => {
                                     <div className="flex flex-col space-y-2">
                                         {[1, 2].map((j) => (
                                             <div key={j} className={`flex items-center gap-2 py-1.5 px-3 rounded-lg border-r-2 ${j === 1 ? 'bg-gradient-to-r from-blue-50/80 to-transparent dark:from-blue-900/20 border-blue-500/50'
-                                                : 'bg-gradient-to-r from-emerald-50/80 to-transparent dark:from-emerald-900/20 border-emerald-500/50'
+                                                    : 'bg-gradient-to-r from-emerald-50/80 to-transparent dark:from-emerald-900/20 border-emerald-500/50'
                                                 }`}>
                                                 <div className={`w-4 h-4 rounded animate-pulse ${j === 1 ? 'bg-blue-500/40' : 'bg-emerald-500/40'
                                                     }`}></div>
@@ -313,7 +313,7 @@ const Courses = () => {
                         <FaCalculator className="text-3xl sm:text-4xl text-blue-500 animate-spin-slow" />
                     </div>
                     <p className="text-base sm:text-xl text-slate-600 dark:text-slate-300 font-arabicUI3 mt-4">
-                        اختر الكورس المناسب وابدأ رحلة تعلم الكيمياء
+                        اختر الكورس المناسب وابدأ رحلة تعلم الرياضيات
                     </p>
                 </div>
                 {/* Level Selection Tabs */}
@@ -404,7 +404,7 @@ const Courses = () => {
                                         {item.level}
                                     </div>
                                 </div>
-
+                               
                                 {/* Course Title - Overlay */}
                                 <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-blue-500/10 to-transparent" />
                                 {/* Math Icon */}

@@ -196,7 +196,7 @@ const Offer = () => {
                             <FiZap className="text-xl sm:text-3xl md:text-4xl text-red-500" />
                         </div>
                         <p className="text-sm sm:text-base md:text-xl text-slate-600 dark:text-slate-300 font-arabicUI3 px-2">
-                            احصل على أفضل العروض لتعلم الكيمياء مع والتر وايت
+                            احصل على أفضل العروض لتعلم الكيمياء مع شهد هاني
                         </p>
                     </div>
                     {/* Section Buttons */}

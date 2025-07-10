@@ -143,20 +143,20 @@ const SignInPage = () => {
                          bg-white/5 backdrop-blur-lg border border-white/10 hover:border-white/20 
                          transform hover:scale-105 transition-all duration-500">
                         <IoMdCalculator className="text-3xl text-blue-300" />
-                        <span className="font-arabicUI2 text-xl text-blue-300">منصة والتر وايت</span>
+                        <span className="font-arabicUI2 text-xl text-blue-300">منصة حسام ميرة</span>
                     </div>
 
                     <h1 className="text-3xl sm:text-4xl lg:text-5xl font-arabicUI2 font-bold text-white leading-tight">
                         مرحباً بعودتك إلى
                         <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-purple-300">
-                            عالم الكيمياء الممتع
+                            عالم الرياضيات الممتع
                         </span>
                     </h1>
 
                     <p className="text-base sm:text-lg lg:text-xl font-arabicUI2 text-white/80 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                        سجل دخولك الآن واستكمل رحلتك في تعلم الكيمياء بطريقة مختلفة ومبتكرة
+                        سجل دخولك الآن واستكمل رحلتك في تعلم الرياضيات بطريقة مختلفة ومبتكرة
                         <span className="text-blue-300"> مع أفضل المدرسين </span>
-                        وأحدث طرق شرح المفاهيم الكيميائية ❤️
+                        وأحدث طرق شرح المفاهيم الرياضية ❤️
                     </p>
 
                     <div className="flex flex-wrap gap-3 sm:gap-4 justify-center lg:justify-end mt-6">
