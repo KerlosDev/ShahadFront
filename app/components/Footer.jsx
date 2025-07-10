@@ -13,10 +13,10 @@ const Footer = () => {
     ];
 
     const socials = [
-        { icon: <FaYoutube size={24} />, href: "https://youtube.com/@hossammirah?si=okHxGI_hKoYzqUcc", label: "YouTube", color: "hover:text-red-500" },
-        { icon: <FaFacebook size={24} />, href: "https://www.facebook.com/share/16hNBr3APE/?mibextid=wwXIfr", label: "Facebook", color: "hover:text-blue-500" },
-        { icon: <FaTelegram size={24} />, href: "https://t.me/+ELVrCqJYCeZiYmVk", label: "Telegram", color: "hover:text-blue-500" },
-        { icon: <FiInstagram size={24} />, href: "https://www.instagram.com/hossammirah", label: "Telegram", color: "hover:text-orange-500" },
+        { icon: <FaYoutube size={24} />, href: "#", label: "YouTube", color: "hover:text-red-500" },
+        { icon: <FaFacebook size={24} />, href: "#", label: "Facebook", color: "hover:text-blue-500" },
+        { icon: <FaTelegram size={24} />, href: "#", label: "Telegram", color: "hover:text-blue-500" },
+        { icon: <FiInstagram size={24} />, href: "#",label: "Telegram", color: "hover:text-orange-500" },
     ];
 
     const mathSymbols = ['∑', '∫', 'π', '∞', '√', '∆', 'θ', 'α', 'β', 'γ']; return (
@@ -40,12 +40,12 @@ const Footer = () => {
                                 <TbMathFunction size={20} className="text-white" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-bold text-white">حسام ميرة</h3>
-                                <p className="text-blue-400 text-xs">منصة تعليم الرياضيات</p>
+                                <h3 className="text-lg font-bold text-white">والتر وايت</h3>
+                                <p className="text-blue-400 text-xs">منصة تعليم الكيمياء</p>
                             </div>
                         </div>
                         <p className="text-gray-400 text-sm leading-relaxed">
-                            تعلم الرياضيات بطريقة مبتكرة وممتعة مع أ / حسام ميرة  .
+                            تعلم الكيمياء بطريقة مبتكرة وممتعة مع أ / والتر وايت   .
                         </p>
                     </div>
 
@@ -78,7 +78,7 @@ const Footer = () => {
                         </h4>
                         <div className="space-y-3">
                             <div className="text-gray-400 text-sm">
-                                <a href="https://t.me/Hossammirah" dir='rtl' className="text-blue-400 hover:text-blue-300 transition-colors">
+                                <a href="https://t.me/KerlosHany" dir='rtl' className="text-blue-400 hover:text-blue-300 transition-colors">
                                     تواصل تيليجرام
                                 </a>
                             </div>
@@ -106,7 +106,7 @@ const Footer = () => {
                 {/* Compact Bottom Bar */}
                 <div className="pt-6 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-4">
                     <p className="text-gray-500 text-xs">
-                        © {new Date().getFullYear()} منصة حسام ميرة للرياضيات - جميع الحقوق محفوظة
+                        © {new Date().getFullYear()} منصة والتر وايت للكيمياء - جميع الحقوق محفوظة
                     </p>
 
                     <a href="https://kerlos.site/"

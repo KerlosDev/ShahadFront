@@ -1,6 +1,6 @@
 // Dynamic sitemap.xml for Next.js App Router
 export async function GET() {
-  const baseUrl = 'https://www.hossammirah.com'; // Change to your actual domain
+  const baseUrl = 'https://waltere.vercel.app'; // Change to your actual domain
 
   // Static pages
   const pages = [
@@ -15,7 +15,7 @@ export async function GET() {
   let coursesSitemap = '';
   try {
     // Using the same API endpoint as in Courses.jsx
-    const courseRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.hossammirah.com'}/course`);
+    const courseRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://walterbackend.onrender.com'}/course`);
 
     if (courseRes.ok) {
       const data = await courseRes.json();

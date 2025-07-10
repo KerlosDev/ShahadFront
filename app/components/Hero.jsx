@@ -39,7 +39,7 @@ const Hero = () => {
                                 className="relative z-10 w-full h-[500px] sm:h-auto max-w-lg mx-auto 
                                          object-contain sm:object-cover drop-shadow-2xl 
                                          hover:scale-102 transition-transform duration-300"
-                                alt="Hossam Image"
+                                alt="Walter Image"
                             />
                         </div>
                     </div>
@@ -70,7 +70,7 @@ const Hero = () => {
                                                      bg-gradient-to-l from-blue-600 via-purple-600 to-blue-800 
                                                      bg-clip-text text-transparent font-bold 
                                                      drop-shadow-lg group-hover:scale-105 transition-transform duration-300">
-                                            حسام ميرة
+                                            والتر وايت
                                         </h1>                                        <div className="hidden sm:flex w-12 h-12 bg-gradient-to-br from-yellow-500/30 to-red-500/30 
                                                       rounded-full items-center justify-center group-hover:scale-110 
                                                       transition-transform duration-300">
@@ -86,7 +86,7 @@ const Hero = () => {
                                         <h2 className="text-xl sm:text-2xl lg:text-3xl font-arabicUI3 
                                                      bg-gradient-to-l from-purple-600 via-blue-600 to-cyan-600 
                                                      bg-clip-text text-transparent font-bold">
-                                            خبير الرياضيات الأول والمعلم المتميز
+                                            خبير الكيمياء الأول والمعلم المتميز
                                         </h2>
                                         <MdSchool className="text-2xl text-blue-500 animate-pulse" />
                                     </div>*/}
@@ -96,7 +96,7 @@ const Hero = () => {
                                         <FaTrophy className="text-yellow-500 text-lg animate-spin-slow" />
                                         <span className="text-base sm:text-lg font-arabicUI3 
                                                        text-slate-700 dark:text-slate-300">
-                                            مدرس الرياضيات البحتة والتطبيقية بخبرة +5 سنوات                                        </span>
+                                            مدرس الكيمياء البحتة والتطبيقية بخبرة +5 سنوات                                        </span>
                                     </div>
                                 </div>
 
@@ -144,7 +144,7 @@ const Hero = () => {
                                         <FaChartLine className="text-3xl text-blue-500 animate-pulse" />
                                         <h3 className="text-xl sm:text-2xl lg:text-3xl font-arabicUI3 
                                                      text-slate-600 dark:text-slate-300">
-                                            شرح الرياضيات بالنظام الجديد                                        </h3>
+                                            شرح الكيمياء بالنظام الجديد                                        </h3>
                                         <MdVideoLibrary className="text-3xl text-green-500 animate-bounce" />
                                     </div>
                                 </div>
@@ -221,7 +221,7 @@ const Hero = () => {
                                           border border-yellow-500/30 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
                                 <div className="flex flex-col sm:flex-row items-center gap-4">                                    <div className="flex-1 space-y-2">
                                     <h3 className="text-xl sm:text-2xl font-arabicUI2 text-yellow-600 dark:text-yellow-400">
-                                        احصل على كتاب الرياضيات الآن!
+                                        احصل على كتاب الكيمياء الآن!
                                     </h3>
                                     <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300">
                                         كتاب شامل يغطي جميع المواضيع بأسلوب سهل وممتع
