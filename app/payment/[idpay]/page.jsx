@@ -234,7 +234,7 @@ const Page = ({ params }) => {
         return (
             <div className="space-y-4 sm:space-y-6">
                 <div className="space-y-4">
-                    <h3 dir='rtl' className="text-lg gap-4 sm:text-xl font-medium text-center flex  place-items-center"> طريقة الدفع فودافون كاش او انستا باي <span><BsCashCoin></BsCashCoin></span> </h3>
+                    <h3 dir='rtl' className="text-lg gap-4 sm:text-xl font-medium text-center flex  place-items-center"> طريقة الدفع فودافون كاش <span><BsCashCoin></BsCashCoin></span> </h3>
                     <div className="bg-gradient-to-tr from-[#ff3b42] to-[#FF8C8F] p-4 sm:p-6 rounded-xl text-center space-y-3">
                         <div className="space-y-2 flex flex-col items-center">
                             <img src="/vodafone.png" alt="Vodafone Cash" className="w-40 filter brightness-0 invert mx-auto mb-2" />
