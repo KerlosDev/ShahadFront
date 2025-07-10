@@ -2,8 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import { FaFacebook, FaTelegram, FaYoutube } from "react-icons/fa";
 import { BsWhatsapp } from "react-icons/bs";
-import { BiMath } from "react-icons/bi";
-import { TbMathFunction, TbMathIntegral, TbMathPi } from "react-icons/tb";
+import { FaFlask } from "react-icons/fa";
+import { TbAtom, TbMolecule, TbFlask, TbMouseFilled } from "react-icons/tb";
 import { FiInstagram } from 'react-icons/fi';
 
 const Footer = () => {
@@ -16,17 +16,17 @@ const Footer = () => {
         { icon: <FaYoutube size={24} />, href: "#", label: "YouTube", color: "hover:text-red-500" },
         { icon: <FaFacebook size={24} />, href: "#", label: "Facebook", color: "hover:text-blue-500" },
         { icon: <FaTelegram size={24} />, href: "#", label: "Telegram", color: "hover:text-blue-500" },
-        { icon: <FiInstagram size={24} />, href: "#",label: "Telegram", color: "hover:text-orange-500" },
+        { icon: <FiInstagram size={24} />, href: "#", label: "Telegram", color: "hover:text-orange-500" },
     ];
 
-    const mathSymbols = ['∑', '∫', 'π', '∞', '√', '∆', 'θ', 'α', 'β', 'γ']; return (
+    const chemSymbols = ['H₂O', 'CO₂', 'NaCl', 'H₂SO₄', 'CaCO₃', 'NH₃', 'CH₄', 'O₂', 'N₂', 'HCl']; return (
         <footer dir="rtl" className="relative bg-slate-900/95 font-arabicUI3 overflow-hidden border-t border-gray-800">
-            {/* Subtle Mathematical Background */}
+            {/* Subtle Chemistry Background */}
             <div className="absolute inset-0 opacity-3">
-                <div className="absolute top-4 left-8 text-3xl text-blue-500/30">π</div>
-                <div className="absolute top-6 right-12 text-2xl text-purple-500/30">∑</div>
-                <div className="absolute bottom-4 left-12 text-2xl text-green-500/30">∫</div>
-                <div className="absolute bottom-6 right-8 text-xl text-blue-500/30">∞</div>
+                <div className="absolute top-4 left-8 text-3xl text-blue-500/30">H₂O</div>
+                <div className="absolute top-6 right-12 text-2xl text-purple-500/30">CO₂</div>
+                <div className="absolute bottom-4 left-12 text-2xl text-green-500/30">NaCl</div>
+                <div className="absolute bottom-6 right-8 text-xl text-blue-500/30">O₂</div>
             </div>
 
             <div className="relative max-w-7xl mx-auto px-6 py-8">
@@ -37,7 +37,7 @@ const Footer = () => {
                     <div className="space-y-3">
                         <div className="flex items-center gap-2">
                             <div className="p-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg">
-                                <TbMathFunction size={20} className="text-white" />
+                                <TbFlask size={20} className="text-white" />
                             </div>
                             <div>
                                 <h3 className="text-lg font-bold text-white">والتر وايت</h3>
@@ -52,7 +52,7 @@ const Footer = () => {
                     {/* Quick Links - Compact */}
                     <div className="space-y-3">
                         <h4 className="text-base font-semibold text-white flex items-center gap-2">
-                            <TbMathIntegral size={16} className="text-blue-400" />
+                            <TbMouseFilled size={16} className="text-blue-400" />
                             روابط سريعة
                         </h4>
                         <ul className="space-y-2">
@@ -73,7 +73,7 @@ const Footer = () => {
                     {/* Contact & Social - Compact */}
                     <div className="space-y-3">
                         <h4 className="text-base font-semibold text-white flex items-center gap-2">
-                            <TbMathPi size={16} className="text-blue-400" />
+                            <TbAtom size={16} className="text-blue-400" />
                             تواصل معنا
                         </h4>
                         <div className="space-y-3">

@@ -2,11 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { FaLightbulb, FaStar, FaGraduationCap, FaUsers, FaTrophy, FaPlay } from "react-icons/fa";
 import { GiTakeMyMoney } from "react-icons/gi";
-import { FaCalculator, FaSquareRootAlt, FaInfinity, FaChartLine, FaPrint, FaQuoteLeft, FaAward } from "react-icons/fa";
-import { MdFunctions, MdVideoLibrary, MdSchool } from "react-icons/md";
-import { TbMathSymbols, TbMathIntegral, TbCertificate } from "react-icons/tb";
+import { FaFlask, FaAtom, FaVial, FaChartLine, FaQuoteLeft, FaAward } from "react-icons/fa";
+import { MdScience, MdVideoLibrary, MdSchool } from "react-icons/md";
+import { TbAtom, TbMolecule, TbCertificate, TbFlask, TbMouseFilled } from "react-icons/tb";
 import { BsCheckCircleFill } from "react-icons/bs";
 import Link from 'next/link';
+import { Beaker } from 'lucide-react';
 
 const Hero = () => {
     return (
@@ -14,16 +15,16 @@ const Hero = () => {
             <div className="absolute inset-0 overflow-hidden">
                 <div className="absolute top-20 right-10 w-40 h-40 bg-blue-500/10 backdrop-blur-3xl rounded-full 
                               flex items-center justify-center animate-float">
-                    <FaPrint className="text-6xl text-blue-500/50 animate-spin-slow" />
+                    <Beaker className="text-6xl text-blue-500/50 animate-spin-slow" />
                 </div>
                 <div className="absolute top-40 left-20 w-48 h-48 bg-red-500/10 backdrop-blur-3xl rounded-full 
                               flex items-center justify-center animate-float-delayed">
-                    <FaSquareRootAlt className="text-7xl text-red-500/50 animate-bounce" />
+                    <FaAtom className="text-7xl text-red-500/50 animate-bounce" />
                 </div>
                 {/* New decorative elements */}
                 <div className="absolute bottom-20 right-1/4 w-32 h-32 bg-yellow-500/10 backdrop-blur-3xl rounded-full 
                               flex items-center justify-center animate-pulse">
-                    <FaInfinity className="text-5xl text-yellow-500/50 animate-spin" />
+                    <FaVial className="text-5xl text-yellow-500/50 animate-spin" />
                 </div>
                 <div className="absolute inset-0 opacity-10   bg-repeat mix-blend-overlay"></div>
             </div>
@@ -64,7 +65,7 @@ const Hero = () => {
                                         <div className="w-12 h-12 bg-gradient-to-br from-blue-500/30 to-purple-500/30 
                                                       rounded-full flex items-center justify-center group-hover:scale-110 
                                                       transition-transform duration-300">
-                                            <FaCalculator className="text-2xl text-blue-600 animate-spin-slow" />
+                                            <FaFlask className="text-2xl text-blue-600 animate-spin-slow" />
                                         </div>
                                         <h1 className="text-4xl sm:text-5xl lg:text-7xl font-arabicUI2 
                                                      bg-gradient-to-l from-blue-600 via-purple-600 to-blue-800 
@@ -157,7 +158,7 @@ const Hero = () => {
                                         <div className="flex flex-col items-center text-center space-y-2">
                                             <div className="w-12 h-12 bg-blue-500/30 rounded-full flex items-center justify-center
                                                           group-hover/item:animate-spin">
-                                                <TbMathIntegral className="text-2xl text-blue-500" />
+                                                <TbMouseFilled className="text-2xl text-blue-500" />
                                             </div>
                                             <span className="text-sm font-arabicUI3 text-blue-700 dark:text-blue-300 font-semibold">
                                                 حلول تفاعلية متقدمة
@@ -172,7 +173,7 @@ const Hero = () => {
                                         <div className="flex flex-col items-center text-center space-y-2">
                                             <div className="w-12 h-12 bg-red-500/30 rounded-full flex items-center justify-center
                                                           group-hover/item:animate-bounce">
-                                                <MdFunctions className="text-2xl text-red-500" />
+                                                <MdScience className="text-2xl text-red-500" />
                                             </div>
                                             <span className="text-sm font-arabicUI3 text-red-700 dark:text-red-300 font-semibold">
                                                 شرح مبسط وواضح
@@ -188,7 +189,7 @@ const Hero = () => {
                                         <div className="flex flex-col items-center text-center space-y-2">
                                             <div className="w-12 h-12 bg-green-500/30 rounded-full flex items-center justify-center
                                                           group-hover/item:animate-pulse">
-                                                <TbMathSymbols className="text-2xl text-green-500" />
+                                                <TbFlask className="text-2xl text-green-500" />
                                             </div>
                                             <span className="text-sm font-arabicUI3 text-green-700 dark:text-green-300 font-semibold">
                                                 أمثلة متنوعة شاملة
