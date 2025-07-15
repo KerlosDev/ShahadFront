@@ -355,57 +355,57 @@ const CoursePage = () => {
                         {/* Hero Section with Glassmorphism */}
                         <div className="relative mb-10 rounded-3xl overflow-hidden group shadow-2xl">
                             {/* Background Image Container */}
-                            <div className="relative aspect-[21/9] bg-gradient-to-r from-indigo-900/90 via-blue-800/80 to-purple-900/90">
+                            <div className="relative min-h-[300px] sm:min-h-[400px] md:min-h-[500px] bg-gradient-to-r from-indigo-900/90 via-blue-800/80 to-purple-900/90">
                                 <img
                                     src={courseInfo.image || '/pi.png'}
                                     alt={courseInfo.nameofcourse || 'Course Image'}
-                                    className="absolute inset-0 w-full h-full object-cover opacity-40 transition-all duration-1000 group-hover:opacity-60 group-hover:scale-110"
+                                    className="w-full h-auto min-h-[300px] sm:min-h-[400px] md:min-h-[500px] object-cover opacity-40 transition-all duration-1000 group-hover:opacity-60 group-hover:scale-110"
                                     onError={(e) => {
                                         e.target.src = '/pi.png';
                                     }}
                                 />
 
                                 {/* Multiple Gradient Overlays for Depth */}
-                                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
- 
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+
                                 {/* Floating Elements */}
-                                <div className="absolute top-8 right-8 w-20 h-20 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 flex items-center justify-center shadow-xl">
-                                    <FaChalkboardTeacher className="text-blue-400 text-3xl" />
+                                <div className="absolute top-4 sm:top-8 right-4 sm:right-8 w-12 h-12 sm:w-20 sm:h-20 bg-white/5 backdrop-blur-md rounded-xl sm:rounded-2xl border border-white/10 flex items-center justify-center shadow-xl">
+                                    <FaChalkboardTeacher className="text-blue-400 text-xl sm:text-3xl" />
                                 </div>
 
                                 {/* Content Container */}
                                 <div className="absolute inset-0 flex items-end">
-                                    <div className="w-full p-8 md:p-12">
-                                        <div className="max-w-4xl space-y-6">
+                                    <div className="w-full p-4 sm:p-8 md:p-12">
+                                        <div className="max-w-4xl space-y-3 sm:space-y-6">
                                             {/* Course Badge */}
-                                            <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/20 shadow-lg">
+                                            <div className="inline-flex items-center gap-2 sm:gap-3 bg-white/10 backdrop-blur-md px-3 sm:px-6 py-2 sm:py-3 rounded-xl sm:rounded-2xl border border-white/20 shadow-lg">
                                                 <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-                                                <FaChalkboardTeacher className="text-blue-400 text-lg" />
-                                                <span className="text-blue-300 font-semibold text-lg">كورس {courseInfo.level || "تعليمي"}</span>
+                                                <FaChalkboardTeacher className="text-blue-400 text-sm sm:text-lg" />
+                                                <span className="text-blue-300 font-semibold text-sm sm:text-lg">كورس {courseInfo.level || "تعليمي"}</span>
                                             </div>
 
                                             {/* Course Title */}
-                                            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight drop-shadow-2xl">
+                                            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-black text-white leading-tight drop-shadow-2xl">
                                                 <span className="bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
                                                     {courseInfo.nameofcourse}
                                                 </span>
                                             </h1>
 
                                             {/* Price and Features Row */}
-                                            <div className="flex flex-wrap items-center gap-4">
-                                                <div className="inline-flex items-center gap-3 bg-green-500/20 backdrop-blur-md px-6 py-3 rounded-2xl border border-green-400/30 shadow-lg">
+                                            <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+                                                <div className="inline-flex items-center gap-2 sm:gap-3 bg-green-500/20 backdrop-blur-md px-3 sm:px-6 py-2 sm:py-3 rounded-xl sm:rounded-2xl border border-green-400/30 shadow-lg">
                                                     <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                                                    <span className="text-green-300 font-bold text-xl">
+                                                    <span className="text-green-300 font-bold text-sm sm:text-xl">
                                                         {courseInfo.isFree ? 'مجاني تماماً' : `${courseInfo.price} جنيه`}
                                                     </span>
                                                 </div>
 
                                                 {isEnrolled && (
-                                                    <div className="inline-flex items-center gap-3 bg-emerald-500/20 backdrop-blur-md px-6 py-3 rounded-2xl border border-emerald-400/30 shadow-lg">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-emerald-400" viewBox="0 0 20 20" fill="currentColor">
+                                                    <div className="inline-flex items-center gap-2 sm:gap-3 bg-emerald-500/20 backdrop-blur-md px-3 sm:px-6 py-2 sm:py-3 rounded-xl sm:rounded-2xl border border-emerald-400/30 shadow-lg">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-6 sm:w-6 text-emerald-400" viewBox="0 0 20 20" fill="currentColor">
                                                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                                                         </svg>
-                                                        <span className="text-emerald-300 font-semibold">مشترك بالفعل</span>
+                                                        <span className="text-emerald-300 font-semibold text-sm sm:text-base">مشترك بالفعل</span>
                                                     </div>
                                                 )}
                                             </div>
