@@ -97,7 +97,7 @@ const Hero = () => {
                                         <FaTrophy className="text-yellow-500 text-lg animate-spin-slow" />
                                         <span className="text-base sm:text-lg font-arabicUI3 
                                                        text-slate-700 dark:text-slate-300">
-                                            مدرس الكيمياء البحتة والتطبيقية بخبرة +5 سنوات                                        </span>
+                                           مدرس الكيمياء العالمي صانع الميث                                       </span>
                                     </div>
                                 </div>
 
