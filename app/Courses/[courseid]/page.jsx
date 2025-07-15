@@ -739,7 +739,7 @@ const CoursePage = () => {
                     </div>
                 )}
 
-                {user && !isEnrolled && !loading && (
+                {user && !isEnrolled && !loading && !courseInfo.isFree && (
                     <div className="fixed bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-50 w-full px-4 sm:px-0 sm:w-auto">
                         <div className="bg-white/10 backdrop-blur-2xl rounded-2xl p-4 sm:p-6 md:p-8 border border-white/20 shadow-2xl max-w-sm sm:max-w-md w-full">
                             <div className="text-center space-y-4 sm:space-y-6">
