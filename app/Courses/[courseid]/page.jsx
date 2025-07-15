@@ -332,6 +332,38 @@ const CoursePage = () => {
                         height: 100%; 
                         width: 100%;
                     }
+                    
+                    /* Mobile fullscreen optimizations */
+                    @media (max-width: 768px) {
+                        .plyr--fullscreen-active {
+                            transform: translateZ(0);
+                            backface-visibility: hidden;
+                            -webkit-backface-visibility: hidden;
+                            will-change: transform;
+                        }
+                        
+                        .plyr--fullscreen-active .plyr__video-wrapper {
+                            transform: translateZ(0);
+                            backface-visibility: hidden;
+                            -webkit-backface-visibility: hidden;
+                        }
+                        
+                        .plyr--fullscreen-active iframe {
+                            transform: translateZ(0);
+                            backface-visibility: hidden;
+                            -webkit-backface-visibility: hidden;
+                            will-change: transform;
+                        }
+                    }
+                    
+                    /* Prevent layout shifts during fullscreen transitions */
+                    .plyr--fullscreen-enabled {
+                        transition: none !important;
+                    }
+                    
+                    .plyr__video-wrapper {
+                        background: #000;
+                    }
                 `}</style>
             </Head>
             <div dir='rtl' className="min-h-screen bg-gradient-to-br from-[#0A1121] via-[#0F1629] to-[#1A202C] text-white font-arabicUI3">
@@ -479,7 +511,15 @@ const CoursePage = () => {
                             <div className="relative group">
                                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-3xl blur-xl opacity-75 group-hover:opacity-100 transition-opacity duration-500"></div>
                                 <div className="relative bg-black/90 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
-                                    <div className="aspect-video">
+                                    <div 
+                                        className="aspect-video"
+                                        style={{
+                                            willChange: 'transform',
+                                            backfaceVisibility: 'hidden',
+                                            WebkitBackfaceVisibility: 'hidden',
+                                            transform: 'translateZ(0)'
+                                        }}
+                                    >
                                         {currentVideoUrl && !isContentLocked && isReady ? (
                                             <VideoPlayer videoUrl={currentVideoUrl} />
                                         ) : (
