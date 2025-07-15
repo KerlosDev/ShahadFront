@@ -332,53 +332,11 @@ const CoursePage = () => {
                         height: 100%; 
                         width: 100%;
                     }
-                    
-                    /* Mobile fullscreen optimizations */
-                    @media (max-width: 768px) {
-                        .plyr--fullscreen-active {
-                            transform: translateZ(0);
-                            backface-visibility: hidden;
-                            -webkit-backface-visibility: hidden;
-                            will-change: transform;
-                        }
-                        
-                        .plyr--fullscreen-active .plyr__video-wrapper {
-                            transform: translateZ(0);
-                            backface-visibility: hidden;
-                            -webkit-backface-visibility: hidden;
-                        }
-                        
-                        .plyr--fullscreen-active iframe {
-                            transform: translateZ(0);
-                            backface-visibility: hidden;
-                            -webkit-backface-visibility: hidden;
-                            will-change: transform;
-                        }
-                    }
-                    
-                    /* Prevent layout shifts during fullscreen transitions */
-                    .plyr--fullscreen-enabled {
-                        transition: none !important;
-                    }
-                    
-                    .plyr__video-wrapper {
-                        background: #000;
-                    }
                 `}</style>
             </Head>
             <div dir='rtl' className="min-h-screen bg-gradient-to-br from-[#0A1121] via-[#0F1629] to-[#1A202C] text-white font-arabicUI3">
                 {/* Enhanced Animated Background */}
-                <div className="fixed inset-0 pointer-events-none overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-cyan-900/25" />
-                    <div className="absolute h-full w-full bg-[url('/grid.svg')] opacity-[0.03]" />
-                    {/* Floating particles effect */}
-                    <div className="absolute top-0 left-0 w-full h-full">
-                        <div className="absolute top-20 left-10 w-2 h-2 bg-blue-400/20 rounded-full animate-pulse"></div>
-                        <div className="absolute top-40 right-20 w-1 h-1 bg-purple-400/30 rounded-full animate-ping"></div>
-                        <div className="absolute bottom-32 left-1/4 w-3 h-3 bg-cyan-400/15 rounded-full animate-bounce"></div>
-                        <div className="absolute top-1/3 right-1/3 w-1.5 h-1.5 bg-blue-500/25 rounded-full animate-pulse"></div>
-                    </div>
-                </div>
+                
 
                 <div className="relative max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
@@ -511,15 +469,7 @@ const CoursePage = () => {
                             <div className="relative group">
                                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-3xl blur-xl opacity-75 group-hover:opacity-100 transition-opacity duration-500"></div>
                                 <div className="relative bg-black/90 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
-                                    <div 
-                                        className="aspect-video"
-                                        style={{
-                                            willChange: 'transform',
-                                            backfaceVisibility: 'hidden',
-                                            WebkitBackfaceVisibility: 'hidden',
-                                            transform: 'translateZ(0)'
-                                        }}
-                                    >
+                                    <div className="aspect-video">
                                         {currentVideoUrl && !isContentLocked && isReady ? (
                                             <VideoPlayer videoUrl={currentVideoUrl} />
                                         ) : (

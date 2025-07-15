@@ -37,45 +37,14 @@ const VideoPlayer = ({ videoUrl }) => {
           'fullscreen'
         ],
         settings: ['quality', 'speed'],
-        fullscreen: {
-          enabled: true,
-          fallback: true,
-          iosNative: true,
-          container: null
-        },
         youtube: {
           noCookie: false,
           rel: 0,
           showinfo: 0,
           iv_load_policy: 3,
-          modestbranding: 1,
-          playsinline: 1
-        },
-        // Mobile performance optimizations
-        speed: { selected: 1, options: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2] },
-        quality: { default: 720, options: [720, 480, 360] }
+          modestbranding: 1
+        }
       });
-
-      // Add mobile-specific event listeners for better performance
-      if (playerRef.current && window.innerWidth <= 768) {
-        playerRef.current.on('enterfullscreen', () => {
-          // Force hardware acceleration
-          const playerElement = containerRef.current.querySelector('.plyr');
-          if (playerElement) {
-            playerElement.style.transform = 'translateZ(0)';
-            playerElement.style.backfaceVisibility = 'hidden';
-          }
-        });
-
-        playerRef.current.on('exitfullscreen', () => {
-          // Reset transforms
-          const playerElement = containerRef.current.querySelector('.plyr');
-          if (playerElement) {
-            playerElement.style.transform = '';
-            playerElement.style.backfaceVisibility = '';
-          }
-        });
-      }
     }
 
     // Cleanup player instance
@@ -95,17 +64,7 @@ const VideoPlayer = ({ videoUrl }) => {
   }
 
   return (
-    <div 
-      ref={containerRef} 
-      className={`${aspectClass} w-full h-full`}
-      style={{
-        willChange: 'transform',
-        backfaceVisibility: 'hidden',
-        WebkitBackfaceVisibility: 'hidden',
-        transform: 'translateZ(0)',
-        WebkitTransform: 'translateZ(0)'
-      }}
-    />
+    <div ref={containerRef} className={`${aspectClass} w-full h-full`} />
   );
 };
 
