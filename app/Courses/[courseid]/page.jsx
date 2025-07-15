@@ -332,11 +332,55 @@ const CoursePage = () => {
                         height: 100%; 
                         width: 100%;
                     }
+                    
+                    /* Bunny.net iframe styling */
+                    #bunny-player {
+                        border: none;
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        height: 100%;
+                        width: 100%;
+                        border-radius: inherit;
+                    }
+                    
+                    /* Mobile fullscreen optimizations */
+                    @media (max-width: 768px) {
+                        .plyr--fullscreen-active,
+                        .plyr--fullscreen-active #bunny-player {
+                            transform: translateZ(0);
+                            backface-visibility: hidden;
+                            -webkit-backface-visibility: hidden;
+                            will-change: transform;
+                        }
+                        
+                        .plyr--fullscreen-active .plyr__video-wrapper {
+                            transform: translateZ(0);
+                            backface-visibility: hidden;
+                            -webkit-backface-visibility: hidden;
+                        }
+                        
+                        .plyr--fullscreen-active iframe {
+                            transform: translateZ(0);
+                            backface-visibility: hidden;
+                            -webkit-backface-visibility: hidden;
+                            will-change: transform;
+                        }
+                    }
+                    
+                    /* Prevent layout shifts during fullscreen transitions */
+                    .plyr--fullscreen-enabled {
+                        transition: none !important;
+                    }
+                    
+                    .plyr__video-wrapper {
+                        background: #000;
+                    }
                 `}</style>
             </Head>
             <div dir='rtl' className="min-h-screen bg-gradient-to-br from-[#0A1121] via-[#0F1629] to-[#1A202C] text-white font-arabicUI3">
                 {/* Enhanced Animated Background */}
-                
+
 
                 <div className="relative max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
