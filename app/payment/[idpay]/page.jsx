@@ -10,7 +10,7 @@ import Link from 'next/link';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import { MdMoney } from 'react-icons/md';
+import { MdMoney, MdWbSunny, MdDarkMode } from 'react-icons/md';
 import { BiMoneyWithdraw } from 'react-icons/bi';
 import { BsCashCoin } from 'react-icons/bs';
 
@@ -28,6 +28,8 @@ const Page = ({ params }) => {
     // Track if component is mounted (client-side only)
     const isMounted = useRef(false);
     const [isClient, setIsClient] = useState(false);
+    // Theme state
+    const [theme, setTheme] = useState('dark');
 
     // Safe token access (client-side only)
     const [token, setToken] = useState('');
@@ -36,6 +38,16 @@ const Page = ({ params }) => {
     useEffect(() => {
         setIsClient(true);
         isMounted.current = true;
+
+        // Initialize theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            setTheme(savedTheme);
+            document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+        } else {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        }
 
         // Now safely get the token from cookies (client-side only)
         const cookieToken = Cookies.get("token");
@@ -171,16 +183,16 @@ const Page = ({ params }) => {
     // Only render login requirement after client-side hydration
     if (isClient && !token) {
         return (
-            <div className="min-h-screen bg-[#0A1121] text-white font-arabicUI3 flex items-center justify-center">
+            <div className="min-h-screen bg-gray-50 dark:bg-[#0A1121] text-gray-900 dark:text-white font-arabicUI3 flex items-center justify-center">
                 <div className="relative container mx-auto px-4">
-                    <div className="max-w-md mx-auto bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 text-center space-y-4">
+                    <div className="max-w-md mx-auto bg-white/80 dark:bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-gray-200 dark:border-white/10 text-center space-y-4 shadow-lg">
                         <div className="w-16 h-16 bg-red-500/20 rounded-full mx-auto flex items-center justify-center">
                             <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m0 0v2m0-2h2m-2 0H10m5-6a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
                         </div>
-                        <h2 className="text-xl font-bold">يجب تسجيل الدخول</h2>
-                        <p className="text-gray-400">الرجاء تسجيل الدخول أو إنشاء حساب للوصول إلى صفحة الدفع</p>
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white">يجب تسجيل الدخول</h2>
+                        <p className="text-gray-600 dark:text-gray-400">الرجاء تسجيل الدخول أو إنشاء حساب للوصول إلى صفحة الدفع</p>
                         <div className="space-y-3">
                             <Link href="/sign-in">
                                 <button className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white rounded-xl py-3">
@@ -188,7 +200,7 @@ const Page = ({ params }) => {
                                 </button>
                             </Link>
                             <Link href="/sign-up">
-                                <button className="w-full bg-white/10 hover:bg-white/20 text-white rounded-xl py-3">
+                                <button className="w-full bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-700 dark:text-white rounded-xl py-3">
                                     إنشاء حساب جديد
                                 </button>
                             </Link>
@@ -202,7 +214,7 @@ const Page = ({ params }) => {
     // Show loading state during initial client-side hydration
     if (!isClient) {
         return (
-            <div className="min-h-screen bg-[#0A1121] text-white font-arabicUI3 flex items-center justify-center">
+            <div className="min-h-screen bg-gray-50 dark:bg-[#0A1121] text-gray-900 dark:text-white font-arabicUI3 flex items-center justify-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent" />
             </div>
         );
@@ -218,11 +230,11 @@ const Page = ({ params }) => {
                         </svg>
                     </div>
                     <div className="space-y-2">
-                        <h3 className="text-xl font-medium text-green-400">تم استلام طلبك بنجاح</h3>
-                        <p className="text-blue-400">سيتم تفعيل الكورس خلال 24 ساعة</p>
+                        <h3 className="text-xl font-medium text-green-500 dark:text-green-400">تم استلام طلبك بنجاح</h3>
+                        <p className="text-blue-600 dark:text-blue-400">سيتم تفعيل الكورس خلال 24 ساعة</p>
                     </div>
                     <Link href="/">
-                        <button className="bg-white/10 hover:bg-white/20 px-6 py-3 rounded-xl transition-all duration-300">
+                        <button className="bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-700 dark:text-white px-6 py-3 rounded-xl transition-all duration-300">
                             العودة للصفحة الرئيسية
                         </button>
                     </Link>
@@ -254,15 +266,15 @@ const Page = ({ params }) => {
                 </div>
 
                 <div className="space-y-4">
-                    <label className="block text-sm text-blue-400">أدخل رقم الموبايل الذي حولت منه</label>
+                    <label className="block text-sm text-blue-600 dark:text-blue-400">أدخل رقم الموبايل الذي حولت منه</label>
                     <input
                         type="number"
                         value={number}
                         placeholder="01XXXXXXXXX"
                         onChange={handlenumber}
                         onKeyDown={handleKeyPress}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3
-                             text-center focus:outline-none focus:border-blue-500 transition-colors"
+                        className="w-full bg-gray-100 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-xl px-4 py-3
+                             text-center text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 transition-colors"
                     />
 
                     <button
@@ -292,12 +304,12 @@ const Page = ({ params }) => {
     };
 
     return (
-        <div className="min-h-screen bg-[#0A1121] text-white font-arabicUI3">
+        <div className="min-h-screen bg-gray-50 dark:bg-[#0A1121] text-gray-900 dark:text-white font-arabicUI3">
             {/* Decorative Elements */}
             <div className="fixed inset-0 pointer-events-none">
-                <div className="absolute inset-0   opacity-5" />
-                <div className="absolute top-0 left-0 w-1/3 h-1/3 bg-gradient-to-br from-blue-500/20 to-transparent blur-[120px]" />
-                <div className="absolute bottom-0 right-0 w-1/3 h-1/3 bg-gradient-to-tl from-indigo-500/20 to-transparent blur-[120px]" />
+                <div className="absolute inset-0 bg-gray-100 dark:bg-transparent opacity-50 dark:opacity-5" />
+                <div className="absolute top-0 left-0 w-1/3 h-1/3 bg-gradient-to-br from-blue-500/10 dark:from-blue-500/20 to-transparent blur-[120px]" />
+                <div className="absolute bottom-0 right-0 w-1/3 h-1/3 bg-gradient-to-tl from-indigo-500/10 dark:from-indigo-500/20 to-transparent blur-[120px]" />
             </div>
 
             {isClient && (
@@ -313,15 +325,15 @@ const Page = ({ params }) => {
                     {/* Header */}
                     <div className="text-center space-y-2">
                         <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 mx-auto rounded-full" />
-                        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">إتمام عملية الشراء</h1>
-                        <p className="text-blue-400 text-sm sm:text-base">خطوة واحدة تفصلك عن بداية رحلتك العلمية</p>
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">إتمام عملية الشراء</h1>
+                        <p className="text-blue-600 dark:text-blue-400 text-sm sm:text-base">خطوة واحدة تفصلك عن بداية رحلتك العلمية</p>
                     </div>
 
                     {error ? (
-                        <div className="text-center p-8 bg-red-500/10 rounded-xl border border-red-500/20">
-                            <h2 className="text-xl text-red-400 mb-4">{error}</h2>
+                        <div className="text-center p-8 bg-red-100 dark:bg-red-500/10 rounded-xl border border-red-300 dark:border-red-500/20">
+                            <h2 className="text-xl text-red-600 dark:text-red-400 mb-4">{error}</h2>
                             <Link href="/">
-                                <button className="bg-white/10 hover:bg-white/20 px-6 py-3 rounded-xl">
+                                <button className="bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-700 dark:text-white px-6 py-3 rounded-xl">
                                     العودة للصفحة الرئيسية
                                 </button>
                             </Link>
@@ -334,32 +346,32 @@ const Page = ({ params }) => {
                         <div className="grid md:grid-cols-5 gap-4 sm:gap-8">
                             {/* Left Section: Course Details */}
                             <div dir='rtl' className="md:col-span-2 space-y-4 sm:space-y-6">
-                                <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+                                <div className="bg-white/80 dark:bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-gray-200 dark:border-white/10 shadow-lg">
                                     <div className="space-y-4">
                                         <div className="flex items-center space-x-3 rtl:space-x-reverse">
                                             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center">
-                                                <GiMolecule className="text-2xl" />
+                                                <GiMolecule className="text-2xl text-white" />
                                             </div>
                                             <div>
-                                                <h3 className="text-lg font-medium">{courseInfo.name}</h3>
-                                                <p className="text-blue-400 text-sm">مع أ/ والتر وايت</p>
+                                                <h3 className="text-lg font-medium text-gray-900 dark:text-white">{courseInfo.name}</h3>
+                                                <p className="text-blue-600 dark:text-blue-400 text-sm">مع أ/ والتر وايت</p>
                                             </div>
                                         </div>
 
                                         <div className="bg-gradient-to-r from-blue-500/10 to-indigo-500/10 rounded-xl p-4">
                                             <div className="flex justify-between items-center">
-                                                <span className="text-blue-400">سعر الكورس</span>
-                                                <span className="text-2xl font-bold">{courseInfo.price} جنيه</span>
+                                                <span className="text-blue-600 dark:text-blue-400">سعر الكورس</span>
+                                                <span className="text-2xl font-bold text-gray-900 dark:text-white">{courseInfo.price} جنيه</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* User Info */}
-                                <div dir='rtl' className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-                                    <h3 className="text-lg font-medium mb-4">معلومات المشترك</h3>
+                                <div dir='rtl' className="bg-white/80 dark:bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-gray-200 dark:border-white/10 shadow-lg">
+                                    <h3 className="text-lg font-medium mb-4 text-gray-900 dark:text-white">معلومات المشترك</h3>
                                     {userLoading ? (
-                                        <div className="text-center text-gray-400 py-4">
+                                        <div className="text-center text-gray-600 dark:text-gray-400 py-4">
                                             <div className="flex justify-center">
                                                 <div className="animate-spin rounded-full h-6 w-6 border-2 border-blue-500 border-t-transparent" />
                                             </div>
@@ -367,29 +379,29 @@ const Page = ({ params }) => {
                                         </div>
                                     ) : userData ? (
                                         <div className="space-y-3">
-                                            <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
-                                                <span className="text-blue-400">الاسم</span>
-                                                <span>{userData.name}</span>
+                                            <div className="flex justify-between items-center p-3 bg-gray-100 dark:bg-white/5 rounded-lg">
+                                                <span className="text-blue-600 dark:text-blue-400">الاسم</span>
+                                                <span className="text-gray-900 dark:text-white">{userData.name}</span>
                                             </div>
-                                            <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
-                                                <span className="text-blue-400">البريد الإلكتروني</span>
-                                                <span className="text-sm">{userData.email}</span>
+                                            <div className="flex justify-between items-center p-3 bg-gray-100 dark:bg-white/5 rounded-lg">
+                                                <span className="text-blue-600 dark:text-blue-400">البريد الإلكتروني</span>
+                                                <span className="text-sm text-gray-900 dark:text-white">{userData.email}</span>
                                             </div>
-                                            <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
-                                                <span className="text-blue-400">رقم الهاتف</span>
-                                                <span>{userData.phoneNumber}</span>
+                                            <div className="flex justify-between items-center p-3 bg-gray-100 dark:bg-white/5 rounded-lg">
+                                                <span className="text-blue-600 dark:text-blue-400">رقم الهاتف</span>
+                                                <span className="text-gray-900 dark:text-white">{userData.phoneNumber}</span>
                                             </div>
-                                            <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
-                                                <span className="text-blue-400">المرحلة الدراسية</span>
-                                                <span>{userData.level}</span>
+                                            <div className="flex justify-between items-center p-3 bg-gray-100 dark:bg-white/5 rounded-lg">
+                                                <span className="text-blue-600 dark:text-blue-400">المرحلة الدراسية</span>
+                                                <span className="text-gray-900 dark:text-white">{userData.level}</span>
                                             </div>
-                                            <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
-                                                <span className="text-blue-400">المحافظة</span>
-                                                <span>{userData.government}</span>
+                                            <div className="flex justify-between items-center p-3 bg-gray-100 dark:bg-white/5 rounded-lg">
+                                                <span className="text-blue-600 dark:text-blue-400">المحافظة</span>
+                                                <span className="text-gray-900 dark:text-white">{userData.government}</span>
                                             </div>
                                         </div>
                                     ) : (
-                                        <div className="text-center text-red-400 py-4">
+                                        <div className="text-center text-red-500 dark:text-red-400 py-4">
                                             <p>حدث خطأ في جلب معلومات المستخدم</p>
                                         </div>
                                     )}
@@ -398,7 +410,7 @@ const Page = ({ params }) => {
 
                             {/* Payment Form Section */}
                             <div className="md:col-span-3">
-                                <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-white/10">
+                                <div className="bg-white/80 dark:bg-white/5 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-gray-200 dark:border-white/10 shadow-lg">
                                     {renderPaymentContent()}
                                 </div>
                             </div>
