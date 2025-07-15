@@ -153,7 +153,7 @@ export default function EnhancedCourseOverview() {
       chemistryExams.reduce((avg, exam) => avg + (exam.correctAnswers / exam.totalQuestions * 100), 0) / chemistryExams.length : 0;
 
     const skillsData = [
-      { name: "الكيمياء", value: Math.round(mathScore) || 70 },
+      { name: "الرياضيات", value: Math.round(mathScore) || 70 },
       { name: "الكيمياء", value: Math.round(chemistryScore) || 50 },
       { name: "التفكير المنطقي", value: Math.round((mathScore + chemistryScore) / 2) || 60 },
       { name: "التحليل", value: Math.round((mathScore * 0.7 + chemistryScore * 0.3)) || 65 },
@@ -162,7 +162,7 @@ export default function EnhancedCourseOverview() {
 
     // Calculate attempts distribution
     const timeDistribution = [
-      { name: "الكيمياء", value: Math.round(studentData.results.filter(exam => exam.examTitle === "Math Final").length / studentData.results.length * 100) },
+      { name: "الرياضيات", value: Math.round(studentData.results.filter(exam => exam.examTitle === "Math Final").length / studentData.results.length * 100) },
       { name: "الكيمياء", value: Math.round(studentData.results.filter(exam => exam.examTitle === "امتحان كيمياء").length / studentData.results.length * 100) }
     ];
 

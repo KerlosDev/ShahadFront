@@ -15,7 +15,7 @@ export async function GET() {
   let coursesSitemap = '';
   try {
     // Using the same API endpoint as in Courses.jsx
-    const courseRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://walterbackend.onrender.com'}/course`);
+    const courseRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.walterwhite.com'}/course`);
 
     if (courseRes.ok) {
       const data = await courseRes.json();

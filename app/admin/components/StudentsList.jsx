@@ -296,48 +296,86 @@ export default function StudentsList() {
 
         return { type, browser, os, icon };
     };    // Export to Excel
-    const exportToExcel = () => {
-        const worksheet = XLSX.utils.json_to_sheet(students.map(student => {
-            const deviceInfo = getDeviceInfo(student.deviceInfo);
-            return {
-                'الاسم': student.name,
-                'البريد الإلكتروني': student.email,
-                'رقم الهاتف': student.phoneNumber,
-                'رقم ولي الأمر': student.parentPhoneNumber,
-                'المحافظة': student.government,
-                'المستوى': student.level,
-                'الحالة': student.isBanned ? 'محظور' : 'نشط',
-                'آخر نشاط': formatDate(student.lastActive),
-                'تاريخ التسجيل': formatDate(student.createdAt),
-                'نوع الجهاز': deviceInfo.type === 'mobile' ? 'هاتف' : deviceInfo.type === 'tablet' ? 'تابلت' : 'كمبيوتر',
-                'المتصفح': deviceInfo.browser,
-                'نظام التشغيل': deviceInfo.os,
-                'جلسة نشطة': student.hasActiveSession ? 'نعم' : 'لا'
-            };
-        }));
+    const exportToExcel = async () => {
+        try {
+            // Show loading toast
+            const loadingToast = toast.loading('جاري تحضير ملف Excel...');
 
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+            const token = Cookies.get('token');
+            if (!token) {
+                throw new Error('No authentication token found');
+            }
 
-        // Generate Excel file
-        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+            // Fetch all students without pagination
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/students?limit=999999`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
 
-        // Create Blob and download
-        const blob = new Blob([excelBuffer], {
-            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
 
-        // Create download link
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', `students-${new Date().toISOString().split('T')[0]}.xlsx`);
-        document.body.appendChild(link);
-        link.click();
+            const data = await response.json();
+            if (data.status !== 'success') {
+                throw new Error(data.message || 'Failed to fetch all students');
+            }
 
-        // Cleanup
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
+            const allStudents = data.data;
+
+            // Create Excel worksheet with all students
+            const worksheet = XLSX.utils.json_to_sheet(allStudents.map(student => {
+                const deviceInfo = getDeviceInfo(student.deviceInfo);
+                return {
+                    'الاسم': student.name,
+                    'البريد الإلكتروني': student.email,
+                    'رقم الهاتف': student.phoneNumber,
+                    'رقم ولي الأمر': student.parentPhoneNumber,
+                    'المحافظة': student.government,
+                    'المستوى': student.level,
+                    'الحالة': student.isBanned ? 'محظور' : 'نشط',
+                    'آخر نشاط': formatDate(student.lastActive),
+                    'تاريخ التسجيل': formatDate(student.createdAt),
+                    'نوع الجهاز': deviceInfo.type === 'mobile' ? 'هاتف' : deviceInfo.type === 'tablet' ? 'تابلت' : 'كمبيوتر',
+                    'المتصفح': deviceInfo.browser,
+                    'نظام التشغيل': deviceInfo.os,
+                    'جلسة نشطة': student.hasActiveSession ? 'نعم' : 'لا'
+                };
+            }));
+
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+
+            // Generate Excel file
+            const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+            // Create Blob and download
+            const blob = new Blob([excelBuffer], {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            });
+
+            // Create download link
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `all-students-${new Date().toISOString().split('T')[0]}.xlsx`);
+            document.body.appendChild(link);
+            link.click();
+
+            // Cleanup
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+
+            // Dismiss loading toast and show success
+            toast.dismiss(loadingToast);
+            toast.success(`تم تصدير ${allStudents.length} طالب بنجاح`);
+
+        } catch (error) {
+            console.error('Error exporting to Excel:', error);
+            toast.error('حدث خطأ في تصدير البيانات');
+        }
     };    // Analytics Section Component
     const AnalyticsSection = () => (
         <div className="grid grid-cols-1 font-arabicUI3 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -373,20 +411,23 @@ export default function StudentsList() {
 
         const RADIAN = Math.PI / 180;
         const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, value, index, name }) => {
-            const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+            // Only show labels for segments larger than 4%
+            if (percent < 0.04) return null;
+
+            const radius = outerRadius + 20; // Position labels outside the pie
             const x = cx + radius * Math.cos(-midAngle * RADIAN);
             const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-            if (percent < 0.05) return null; // Don't show labels for small segments
 
             return (
                 <text
                     x={x}
                     y={y}
-                    fill="white"
+                    fill="#374151"
+                    className="dark:fill-white/70"
                     textAnchor={x > cx ? 'start' : 'end'}
                     dominantBaseline="central"
-                    fontSize="12"
+                    fontSize="11"
+                    fontWeight="500"
                 >
                     {`${(percent * 100).toFixed(0)}%`}
                 </text>
@@ -397,60 +438,67 @@ export default function StudentsList() {
             <div className="grid font-arabicUI3 grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <div className="bg-gray-100 dark:bg-white/5 rounded-2xl p-6 backdrop-blur-sm border border-gray-200 dark:border-white/10">
                     <h3 className="text-lg text-gray-700 dark:text-white/70 mb-4">توزيع المحافظات</h3>
-                    <div className="relative h-[400px]">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <PieChart>
-                                <Pie
-                                    data={analytics.governmentDistribution}
-                                    dataKey="value"
-                                    nameKey="id"
-                                    cx="50%"
-                                    cy="50%"
-                                    labelLine={false}
-                                    label={renderCustomizedLabel}
-                                    outerRadius={150}
-                                    innerRadius={80}
-                                    paddingAngle={2}
-                                    startAngle={90}
-                                    endAngle={450}
-                                    animationBegin={0}
-                                    animationDuration={1500}
-                                    animationEasing="ease-out"
-                                >
-                                    {analytics.governmentDistribution.map((entry, index) => (
-                                        <Cell
-                                            key={`cell-${index}`}
-                                            fill={COLORS[index % COLORS.length]}
-                                            className="transition-all duration-300 hover:opacity-80"
-                                            strokeWidth={2}
-                                            stroke="rgba(255,255,255,0.1)"
-                                        />
-                                    ))}
-                                </Pie>
-                                <Tooltip
-                                    contentStyle={{
-                                        backgroundColor: '#f3f4f6', // gray-100
-                                        border: 'none',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-                                    }}
-                                    labelStyle={{ color: '#111827' }} // gray-900
-                                    formatter={(value, name) => [
-                                        `${value} طالب`,
-                                        `${name}`
-                                    ]}
-                                />
-                            </PieChart>
-                        </ResponsiveContainer>
-                        <div className="absolute bottom-0 left-0 right-0">
-                            <div className="flex flex-wrap justify-center gap-4">
+                    <div className="relative">
+                        <div className="h-[300px]">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                    <Pie
+                                        data={analytics.governmentDistribution}
+                                        dataKey="value"
+                                        nameKey="id"
+                                        cx="50%"
+                                        cy="50%"
+                                        labelLine={false}
+                                        label={renderCustomizedLabel}
+                                        outerRadius={100}
+                                        innerRadius={60}
+                                        paddingAngle={1}
+                                        startAngle={90}
+                                        endAngle={450}
+                                        animationBegin={0}
+                                        animationDuration={1500}
+                                        animationEasing="ease-out"
+                                    >
+                                        {analytics.governmentDistribution.map((entry, index) => (
+                                            <Cell
+                                                key={`cell-${index}`}
+                                                fill={COLORS[index % COLORS.length]}
+                                                className="transition-all duration-300 hover:opacity-80"
+                                                strokeWidth={2}
+                                                stroke="rgba(255,255,255,0.1)"
+                                            />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip
+                                        contentStyle={{
+                                            backgroundColor: '#f3f4f6', // gray-100
+                                            border: 'none',
+                                            borderRadius: '8px',
+                                            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+                                        }}
+                                        labelStyle={{ color: '#111827' }} // gray-900
+                                        formatter={(value, name) => [
+                                            `${value} طالب`,
+                                            `${name}`
+                                        ]}
+                                    />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        </div>
+
+                        {/* Legend below the chart */}
+                        <div className="mt-4 max-h-32 overflow-y-auto">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                                 {analytics.governmentDistribution.map((entry, index) => (
-                                    <div key={`legend-${index}`} className="flex items-center gap-2">
+                                    <div key={`legend-${index}`} className="flex items-center gap-2 text-xs">
                                         <div
-                                            className="w-3 h-3 rounded-full"
+                                            className="w-3 h-3 rounded-full flex-shrink-0"
                                             style={{ backgroundColor: COLORS[index % COLORS.length] }}
                                         />
-                                        <span className="text-sm text-gray-700 dark:text-white/70">{entry.id}</span>
+                                        <span className="text-gray-700 dark:text-white/70 truncate">{entry.id}</span>
+                                        <span className="text-gray-500 dark:text-white/50 ml-auto">
+                                            {((entry.value / analytics.governmentDistribution.reduce((sum, item) => sum + item.value, 0)) * 100).toFixed(0)}%
+                                        </span>
                                     </div>
                                 ))}
                             </div>
@@ -739,48 +787,107 @@ export default function StudentsList() {
         );
     }
 
-    // Pagination component
-    const Pagination = () => (
-        <div className="mt-6 flex font-arabicUI3 items-center justify-between">
-            <div className="text-sm text-gray-600 dark:text-white/60">
-                عرض {((page - 1) * limit) + 1} إلى {Math.min(page * limit, totalStudents)} من {totalStudents} طالب
-            </div>
-            <div className="flex items-center gap-2">
-                <button
-                    onClick={() => setPage(prev => Math.max(prev - 1, 1))}
-                    disabled={page === 1}
-                    className={`px-3 py-1 rounded-lg ${page === 1
-                        ? 'bg-gray-100 dark:bg-white/5 text-gray-300 dark:text-white/30 cursor-not-allowed'
-                        : 'bg-gray-200 dark:bg-white/10 text-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-white/20'
-                        } transition-colors`}
-                >
-                    السابق
-                </button>
-                {[...Array(totalPages)].map((_, index) => (
+    // Pagination component with smart page display
+    const Pagination = () => {
+        const getVisiblePages = () => {
+            const delta = 2;
+            const range = [];
+            const rangeWithDots = [];
+
+            for (let i = Math.max(2, page - delta); i <= Math.min(totalPages - 1, page + delta); i++) {
+                range.push(i);
+            }
+
+            if (page - delta > 2) {
+                rangeWithDots.push(1, '...');
+            } else {
+                rangeWithDots.push(1);
+            }
+
+            rangeWithDots.push(...range);
+
+            if (page + delta < totalPages - 1) {
+                rangeWithDots.push('...', totalPages);
+            } else {
+                rangeWithDots.push(totalPages);
+            }
+
+            return rangeWithDots;
+        };
+
+        return (
+            <div className="mt-6 flex font-arabicUI3 items-center justify-between flex-wrap gap-4">
+                <div className="text-sm text-gray-600 dark:text-white/60 order-1">
+                    عرض {((page - 1) * limit) + 1} إلى {Math.min(page * limit, totalStudents)} من {totalStudents} طالب
+                </div>
+                <div className="flex items-center gap-1 sm:gap-2 order-2 flex-wrap">
                     <button
-                        key={index + 1}
-                        onClick={() => setPage(index + 1)}
-                        className={`w-8 h-8 rounded-lg ${page === index + 1
-                            ? 'bg-blue-600 dark:bg-blue-500 text-white'
+                        onClick={() => setPage(prev => Math.max(prev - 1, 1))}
+                        disabled={page === 1}
+                        className={`px-2 sm:px-3 py-1 rounded-lg text-xs sm:text-sm ${page === 1
+                            ? 'bg-gray-100 dark:bg-white/5 text-gray-300 dark:text-white/30 cursor-not-allowed'
                             : 'bg-gray-200 dark:bg-white/10 text-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-white/20'
                             } transition-colors`}
                     >
-                        {index + 1}
+                        السابق
                     </button>
-                ))}
-                <button
-                    onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
-                    disabled={page === totalPages}
-                    className={`px-3 py-1 rounded-lg ${page === totalPages
-                        ? 'bg-gray-100 dark:bg-white/5 text-gray-300 dark:text-white/30 cursor-not-allowed'
-                        : 'bg-gray-200 dark:bg-white/10 text-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-white/20'
-                        } transition-colors`}
-                >
-                    التالي
-                </button>
+
+                    {totalPages <= 7 ? (
+                        // Show all pages if 7 or fewer
+                        [...Array(totalPages)].map((_, index) => (
+                            <button
+                                key={index + 1}
+                                onClick={() => setPage(index + 1)}
+                                className={`w-6 h-6 sm:w-8 sm:h-8 rounded-lg text-xs sm:text-sm ${page === index + 1
+                                    ? 'bg-blue-600 dark:bg-blue-500 text-white'
+                                    : 'bg-gray-200 dark:bg-white/10 text-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-white/20'
+                                    } transition-colors`}
+                            >
+                                {index + 1}
+                            </button>
+                        ))
+                    ) : (
+                        // Show smart pagination with ellipsis
+                        getVisiblePages().map((pageNum, index) => {
+                            if (pageNum === '...') {
+                                return (
+                                    <span
+                                        key={`ellipsis-${index}`}
+                                        className="px-1 sm:px-2 py-1 text-gray-400 dark:text-white/40 text-xs sm:text-sm"
+                                    >
+                                        ...
+                                    </span>
+                                );
+                            }
+                            return (
+                                <button
+                                    key={pageNum}
+                                    onClick={() => setPage(pageNum)}
+                                    className={`w-6 h-6 sm:w-8 sm:h-8 rounded-lg text-xs sm:text-sm ${page === pageNum
+                                        ? 'bg-blue-600 dark:bg-blue-500 text-white'
+                                        : 'bg-gray-200 dark:bg-white/10 text-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-white/20'
+                                        } transition-colors`}
+                                >
+                                    {pageNum}
+                                </button>
+                            );
+                        })
+                    )}
+
+                    <button
+                        onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
+                        disabled={page === totalPages}
+                        className={`px-2 sm:px-3 py-1 rounded-lg text-xs sm:text-sm ${page === totalPages
+                            ? 'bg-gray-100 dark:bg-white/5 text-gray-300 dark:text-white/30 cursor-not-allowed'
+                            : 'bg-gray-200 dark:bg-white/10 text-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-white/20'
+                            } transition-colors`}
+                    >
+                        التالي
+                    </button>
+                </div>
             </div>
-        </div>
-    );
+        );
+    };
 
     return (
         <div className="container font-arabicUI3 mx-auto p-6">
