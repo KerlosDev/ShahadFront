@@ -717,20 +717,20 @@ const CoursePage = () => {
 
                 {/* Enhanced User Action Prompts */}
                 {!user && !loading && (
-                    <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50">
-                        <div className="bg-white/10 backdrop-blur-2xl rounded-2xl p-8 border border-white/20 shadow-2xl max-w-md w-full mx-4">
-                            <div className="text-center space-y-6">
-                                <div className="w-16 h-16 mx-auto bg-blue-500/20 rounded-2xl flex items-center justify-center">
-                                    <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="fixed bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-50 w-full px-4 sm:px-0 sm:w-auto">
+                        <div className="bg-white/10 backdrop-blur-2xl rounded-2xl p-4 sm:p-6 md:p-8 border border-white/20 shadow-2xl max-w-sm sm:max-w-md w-full">
+                            <div className="text-center space-y-4 sm:space-y-6">
+                                <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-blue-500/20 rounded-2xl flex items-center justify-center">
+                                    <svg className="w-6 h-6 sm:w-8 sm:h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                     </svg>
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-bold text-white mb-3">ابدأ رحلتك التعليمية</h2>
-                                    <p className="text-gray-300 leading-relaxed">قم بتسجيل الدخول للوصول إلى المحتوى التعليمي الحصري ومتابعة تقدمك</p>
+                                    <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 sm:mb-3">ابدأ رحلتك التعليمية</h2>
+                                    <p className="text-sm sm:text-base text-gray-300 leading-relaxed px-2">قم بتسجيل الدخول للوصول إلى المحتوى التعليمي الحصري ومتابعة تقدمك</p>
                                 </div>
                                 <Link href="/sign-in">
-                                    <button className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 px-8 py-4 rounded-xl font-semibold text-white transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                                    <button className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-red-700 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold text-white transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 text-sm sm:text-base">
                                         تسجيل الدخول
                                     </button>
                                 </Link>
@@ -740,20 +740,20 @@ const CoursePage = () => {
                 )}
 
                 {user && !isEnrolled && !loading && (
-                    <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50">
-                        <div className="bg-white/10 backdrop-blur-2xl rounded-2xl p-8 border border-white/20 shadow-2xl max-w-md w-full mx-4">
-                            <div className="text-center space-y-6">
-                                <div className="w-16 h-16 mx-auto bg-orange-500/20 rounded-2xl flex items-center justify-center">
-                                    <svg className="w-8 h-8 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="fixed bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-50 w-full px-4 sm:px-0 sm:w-auto">
+                        <div className="bg-white/10 backdrop-blur-2xl rounded-2xl p-4 sm:p-6 md:p-8 border border-white/20 shadow-2xl max-w-sm sm:max-w-md w-full">
+                            <div className="text-center space-y-4 sm:space-y-6">
+                                <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-orange-500/20 rounded-2xl flex items-center justify-center">
+                                    <svg className="w-6 h-6 sm:w-8 sm:h-8 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                                     </svg>
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-bold text-white mb-3">افتح جميع المميزات</h2>
-                                    <p className="text-gray-300 leading-relaxed">اشترك الآن للحصول على وصول كامل لجميع الدروس والاختبارات والمواد التعليمية</p>
+                                    <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 sm:mb-3">افتح جميع المميزات</h2>
+                                    <p className="text-sm sm:text-base text-gray-300 leading-relaxed px-2">اشترك الآن للحصول على وصول كامل لجميع الدروس والاختبارات والمواد التعليمية</p>
                                 </div>
                                 <Link href={`/payment/${courseInfo.nicknameforcourse || courseid}`}>
-                                    <button className="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 px-8 py-4 rounded-xl font-semibold text-white transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                                    <button className="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold text-white transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 text-sm sm:text-base">
                                         اشترك الآن
                                     </button>
                                 </Link>
