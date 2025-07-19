@@ -48,6 +48,7 @@ const CoursePage = () => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [chapterDetails, setChapterDetails] = useState([]);
     const [enrollmentMessage, setEnrollmentMessage] = useState("");
+    const [minimizedChapters, setMinimizedChapters] = useState([]);
 
     // Fetch course data and check enrollment status
     useEffect(() => {
@@ -169,6 +170,17 @@ const CoursePage = () => {
         setActiveIndex2(index);
         setActiveIndex(1000);
     };
+
+    const toggleChapterMinimize = (chapterIndex) => {
+        setMinimizedChapters(prev => {
+            if (prev.includes(chapterIndex)) {
+                return prev.filter(idx => idx !== chapterIndex);
+            } else {
+                return [...prev, chapterIndex];
+            }
+        });
+    };
+    
     const handleLessonClick = async (chapterIndex, lessonIndex) => {
         // ✅ لو نفس الدرس اللي شغال، بلاش تبعت تاني
         if (activeChapter === chapterIndex && activeLesson === lessonIndex) return;
@@ -362,23 +374,38 @@ const CoursePage = () => {
                                     courseVideoChapters.map((chapter, chapterIndex) => (
                                         <div key={chapter.id} className="p-4 hover:bg-gray-700/30 transition-colors">
                                             <div className="mb-3">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
-                                                        <span className="text-blue-400 font-medium">{chapterIndex + 1}</span>
+                                                <div className="flex items-center justify-between gap-3 cursor-pointer" onClick={() => toggleChapterMinimize(chapterIndex)}>
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                                                            <span className="text-blue-400 font-medium">{chapterIndex + 1}</span>
+                                                        </div>
+                                                        <h4 className="text-white font-medium">{chapter.nameofchapter}</h4>
                                                     </div>
-                                                    <h4 className="text-white font-medium">{chapter.nameofchapter}</h4>
+                                                    <div className="text-gray-400 hover:text-white transition-colors">
+                                                        {minimizedChapters.includes(chapterIndex) ? (
+                                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                            </svg>
+                                                        ) : (
+                                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                                                            </svg>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                            </div>                                            <div className="space-y-2 pr-4">
-                                                {chapter.lessons.map((lesson, lessonIndex) => (
-                                                    <button
-                                                        key={lesson.id}
-                                                        onClick={() => isEnrolled && handleLessonClick(chapterIndex, lessonIndex)}
-                                                        className={`w-full p-3 flex items-center gap-3 rounded-lg transition-all duration-200 
-                                                            ${activeChapter === chapterIndex && activeLesson === lessonIndex
-                                                                ? 'bg-blue-500/20 shadow-lg shadow-blue-500/10'
-                                                                : 'hover:bg-gray-700/30'}`}
-                                                        disabled={!isEnrolled || lesson.locked}
-                                                    >
+                                            </div>
+                                            {!minimizedChapters.includes(chapterIndex) && (
+                                                <div className="space-y-2 pr-4">
+                                                    {chapter.lessons.map((lesson, lessonIndex) => (
+                                                        <button
+                                                            key={lesson.id}
+                                                            onClick={() => isEnrolled && handleLessonClick(chapterIndex, lessonIndex)}
+                                                            className={`w-full p-3 flex items-center gap-3 rounded-lg transition-all duration-200 
+                                                                ${activeChapter === chapterIndex && activeLesson === lessonIndex
+                                                                    ? 'bg-blue-500/20 shadow-lg shadow-blue-500/10'
+                                                                    : 'hover:bg-gray-700/30'}`}
+                                                            disabled={!isEnrolled || lesson.locked}
+                                                        >
                                                         <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors
                                                             ${activeChapter === chapterIndex && activeLesson === lessonIndex
                                                                 ? 'bg-blue-500'
@@ -404,6 +431,7 @@ const CoursePage = () => {
                                                     </button>
                                                 ))}
                                             </div>
+                                            )}
                                         </div>
                                     ))
                                 ) : (
