@@ -90,6 +90,24 @@ const CoursePage = () => {
                             setIsEnrolled(enrollmentStatus);
                             setEnrollmentMessage(enrollmentResponse.data.message);
 
+                            // Save enrollment status to localStorage
+                            if (enrollmentStatus) {
+                                const enrolledCourses = JSON.parse(localStorage.getItem('enrolledCourses') || '[]');
+                                if (!enrolledCourses.includes(courseid)) {
+                                    enrolledCourses.push(courseid);
+                                    localStorage.setItem('enrolledCourses', JSON.stringify(enrolledCourses));
+                                    // Dispatch custom event to notify other components
+                                    window.dispatchEvent(new Event('enrollmentUpdated'));
+                                }
+                            } else {
+                                // Remove from localStorage if not enrolled
+                                const enrolledCourses = JSON.parse(localStorage.getItem('enrolledCourses') || '[]');
+                                const updatedCourses = enrolledCourses.filter(id => id !== courseid);
+                                localStorage.setItem('enrolledCourses', JSON.stringify(updatedCourses));
+                                // Dispatch custom event to notify other components
+                                window.dispatchEvent(new Event('enrollmentUpdated'));
+                            }
+
                             // If enrolled, use the detailed chapter data from enrollment response
                             if (enrollmentStatus && enrollmentResponse.data.enrollment?.courseId?.chapters) {
                                 chaptersData = enrollmentResponse.data.enrollment.courseId.chapters;

@@ -583,7 +583,7 @@ const StudentFollowup = () => {
         });
 
         return (
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
+            <div className="bg-white/10   backdrop-blur-lg rounded-2xl p-6 border border-white/20">
                 <div className="flex justify-between items-center mb-6">
                     <h3 className="text-xl font-bold text-white">الاختبارات</h3>
                     <div className="flex gap-2">
@@ -788,13 +788,14 @@ const StudentFollowup = () => {
                     )}
                 </div>
 
-                <button
-                    onClick={exportAsImage}
-                    className="flex items-center gap-2 px-4 py-2 bg-green-500/20 hover:bg-green-500/30 rounded-lg transition-colors text-white"
-                >
-                    <FaImage />
-                    <span>تصدير كصورة</span>
-                </button>
+                 <button
+                        onClick={exportAsImage}
+                        className="flex  font-arabicUI3 items-center gap-2 px-4 py-2 bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400 rounded-xl hover:bg-green-200 dark:hover:bg-green-500/30 transition-colors"
+                    >
+                        <FaImage />
+                        تصدير كصورة
+                    </button>
+               
             </div>
 
             {activeTab === 'overview' ? (
@@ -1025,8 +1026,8 @@ const StudentFollowup = () => {
                                                 key={pageNumber}
                                                 onClick={() => setCurrentPage(pageNumber)}
                                                 className={`px-3 py-2 rounded-lg transition-colors ${currentPage === pageNumber
-                                                        ? 'bg-blue-500 text-white'
-                                                        : 'bg-white/10 text-white/70 hover:bg-white/20'
+                                                    ? 'bg-blue-500 text-white'
+                                                    : 'bg-white/10 text-white/70 hover:bg-white/20'
                                                     }`}
                                             >
                                                 {pageNumber}
