@@ -5,10 +5,11 @@ import { useRef } from 'react'
 import { HiHeart } from "react-icons/hi";
 import { ToastContainer, toast } from 'react-toastify';
 import { GiMolecule } from "react-icons/gi";
+import { Package, BookOpen } from 'lucide-react';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import { MdMoney } from 'react-icons/md';
 import { BiMoneyWithdraw } from 'react-icons/bi';
@@ -17,7 +18,11 @@ import { BsCashCoin } from 'react-icons/bs';
 const Page = ({ params }) => {
     const { idpay } = use(params);
     const router = useRouter();
-    const [courseInfo, setCourseInfo] = useState(null);
+    const searchParams = useSearchParams();
+    const itemType = searchParams.get('type') || 'course'; // Default to course if not specified
+
+    const [itemData, setItemData] = useState(null);
+    const [number, setNumber] = useState('');
     const [loading, setLoading] = useState(false);
     const [userLoading, setUserLoading] = useState(true);
     const [showmodel, setshowmodel] = useState(false);
@@ -69,6 +74,7 @@ const Page = ({ params }) => {
 
             if (response.status === 200) {
                 setUserData(response.data);
+                // Pre-fill the phone number from user data 
             } else {
                 throw new Error("فشل في جلب بيانات المستخدم");
             }
@@ -80,25 +86,39 @@ const Page = ({ params }) => {
         }
     };
 
-    const getallcoures = async () => {
+    const fetchItemData = async () => {
         setLoading(true);
         setError(null);
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/course/${idpay}`);
+            let url;
+            if (itemType === 'package') {
+                url = `${process.env.NEXT_PUBLIC_API_URL}/packages/${idpay}`;
+            } else {
+                url = `${process.env.NEXT_PUBLIC_API_URL}/course/${idpay}`;
+            }
+
+            const res = await fetch(url);
             if (!res.ok) {
-                throw new Error('Failed to fetch course');
+                throw new Error(`Failed to fetch ${itemType}`);
             }
 
             const data = await res.json();
-            console.log(data)
+            console.log('Fetched data:', data);
+
             if (!data) {
-                setError('الكورس غير موجود');
+                setError(`${itemType === 'package' ? 'الحزمة' : 'الكورس'} غير موجود`);
                 return;
             }
-            setCourseInfo(data);
+
+            // For package data, the API returns data.package
+            if (itemType === 'package' && data.package) {
+                setItemData(data.package);
+            } else {
+                setItemData(data);
+            }
         } catch (error) {
-            console.error("Error fetching course info:", error);
-            setError('حدث خطأ في تحميل بيانات الكورس');
+            console.error(`Error fetching ${itemType} info:`, error);
+            setError(`حدث خطأ في تحميل بيانات ${itemType === 'package' ? 'الحزمة' : 'الكورس'}`);
         } finally {
             setLoading(false);
         }
@@ -106,13 +126,22 @@ const Page = ({ params }) => {
 
     useEffect(() => {
         if (idpay) {
-            getallcoures();
+            fetchItemData();
         }
-    }, [idpay]);
+    }, [idpay, itemType]);
+
+    const handlenumber = (e) => {
+        setNumber(e.target.value);
+    };
 
     const handleclicknum = async () => {
         if (!token) {
             toast.error("يرجى تسجيل الدخول أولا");
+            return;
+        }
+
+        if (number.length < 10) {
+            toast.error("رقم الموبايل غير صحيح");
             return;
         }
 
@@ -124,27 +153,48 @@ const Page = ({ params }) => {
                 return;
             }
 
-            // Create payment link via Fawaterak
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/payment/create-link`, {
-                courseId: idpay
-            }, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            // Submit data to the API based on item type
+            if (itemType === 'package') {
+                // Handle package activation
+                const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/active-package`, {
+                    phoneNumber: number,
+                    packageId: idpay,
+                    price: itemData.price
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
 
-            if (response.status === 200 || response.status === 201) {
-                // Redirect to Fawaterak payment page
-                if (response.data.success && response.data.data.paymentUrl) {
-                    window.location.href = response.data.data.paymentUrl;
+                if (response.status === 200 || response.status === 201) {
+                    toast.success("تم إرسال طلبك بنجاح! سيتم تفعيل الحزمة خلال 24 ساعة");
+                    setSubmitted(true);
+                    setshowmodel(true);
                 } else {
-                    throw new Error("فشل في إنشاء رابط الدفع");
+                    throw new Error("فشل في إرسال البيانات");
                 }
             } else {
-                throw new Error("فشل في إرسال البيانات");
+                // Handle course activation - existing flow
+                const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/active`, {
+                    phoneNumber: number,
+                    courseId: idpay,
+                    price: itemData.price
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.status === 200 || response.status === 201) {
+                    toast.success("تم إرسال طلبك بنجاح! سيتم تفعيل الكورس خلال 24 ساعة");
+                    setSubmitted(true);
+                    setshowmodel(true);
+                } else {
+                    throw new Error("فشل في إرسال البيانات");
+                }
             }
         } catch (error) {
-            console.error("Error processing payment:", error);
+            console.error("Error processing enrollment:", error);
             toast.error(error.response?.data?.message || "حدث خطأ أثناء معالجة الطلب");
         } finally {
             setLoading(false);
@@ -208,7 +258,7 @@ const Page = ({ params }) => {
                     </div>
                     <div className="space-y-2">
                         <h3 className="text-xl font-medium text-green-400">تم استلام طلبك بنجاح</h3>
-                        <p className="text-blue-400">سيتم تفعيل الكورس خلال 24 ساعة</p>
+                        <p className="text-blue-400">سيتم تفعيل {itemType === 'package' ? 'الحزمة' : 'الكورس'} خلال 24 ساعة</p>
                     </div>
                     <Link href="/">
                         <button className="bg-white/10 hover:bg-white/20 px-6 py-3 rounded-xl transition-all duration-300">
@@ -223,65 +273,31 @@ const Page = ({ params }) => {
         return (
             <div className="space-y-4 sm:space-y-6">
                 <div className="space-y-4">
-                    <h3 dir='rtl' className="text-lg gap-4 sm:text-xl font-medium text-center flex place-items-center">
-                        الدفع الإلكتروني الآمن 
-                        <span><BsCashCoin></BsCashCoin></span> 
-                    </h3>
-                    
-                    <div className="bg-gradient-to-r from-blue-500/10 to-indigo-500/10 rounded-xl p-6 text-center space-y-4">
-                        <h4 className="text-lg font-medium text-blue-400">طرق الدفع المتاحة</h4>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                            <div className="bg-white/5 rounded-lg p-3 flex flex-col items-center">
-                                <img src="/vodafone.png" alt="Vodafone Cash" className="w-12 h-12 filter brightness-0 invert mb-2" />
-                                <p className="text-xs">فودافون كاش</p>
-                            </div>
-                            <div className="bg-white/5 rounded-lg p-3 flex flex-col items-center">
-                                <img src="/insta.png" alt="Instapay" className="w-12 h-12 mb-2" />
-                                <p className="text-xs">انستا باي</p>
-                            </div>
-                            <div className="bg-white/5 rounded-lg p-3 flex flex-col items-center">
-                                <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mb-2">
-                                    <span className="text-white text-xs font-bold">VISA</span>
-                                </div>
-                                <p className="text-xs">فيزا</p>
-                            </div>
-                            <div className="bg-white/5 rounded-lg p-3 flex flex-col items-center">
-                                <div className="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center mb-2">
-                                    <span className="text-white text-xs font-bold">MC</span>
-                                </div>
-                                <p className="text-xs">ماستركارد</p>
-                            </div>
+                    <h3 dir='rtl' className="text-lg gap-4 sm:text-xl font-medium text-center flex  place-items-center"> طريقة الدفع فودافون كاش <span><BsCashCoin></BsCashCoin></span> </h3>
+                    <div className="bg-gradient-to-tr from-[#ff3b42] to-[#FF8C8F] p-4 sm:p-6 rounded-xl text-center space-y-3">
+                        <div className="space-y-2 flex flex-col items-center">
+                            <img src="/vodafone.png" alt="Vodafone Cash" className="w-40 filter brightness-0 invert mx-auto mb-2" />
+                            <p className="text-lg sm:text-xl">حول على رقم فودافون كاش</p>
+                            <p className="text-2xl sm:text-4xl font-bold tracking-wider">01069750047</p>
                         </div>
                     </div>
                 </div>
 
-                <div className="bg-gradient-to-r from-green-500/10 to-blue-500/10 rounded-xl p-6 text-center">
-                    <div className="space-y-3">
-                        <h4 className="text-lg font-medium text-green-400">مزايا الدفع الإلكتروني</h4>
-                        <ul className="space-y-2 text-sm text-gray-300 text-right">
-                            <li className="flex items-center gap-2">
-                                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                                دفع آمن ومشفر 100%
-                            </li>
-                            <li className="flex items-center gap-2">
-                                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                                تفعيل فوري للكورس
-                            </li>
-                            <li className="flex items-center gap-2">
-                                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                                إيصال إلكتروني فوري
-                            </li>
-                            <li className="flex items-center gap-2">
-                                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                                دعم فني على مدار الساعة
-                            </li>
-                        </ul>
-                    </div>
-                </div>
 
                 <div className="space-y-4">
+                    <label className="block text-sm text-blue-400">أدخل رقم الموبايل الذي حولت منه</label>
+                    <input
+                        type="number"
+                        value={number}
+                        placeholder="01XXXXXXXXX"
+                        onChange={handlenumber}
+                        onKeyDown={handleKeyPress}
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3
+                             text-center focus:outline-none focus:border-blue-500 transition-colors"
+                    />
+
                     <button
-                        disabled={loading}
+                        disabled={number.length < 10 || loading}
                         onClick={handleclicknum}
                         className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 
                              hover:from-blue-600 hover:to-indigo-600 
@@ -292,38 +308,15 @@ const Page = ({ params }) => {
                         {loading ? (
                             <div className="flex items-center gap-2">
                                 <span className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
-                                <span>جاري التحضير...</span>
+                                <span>جاري التحقق...</span>
                             </div>
                         ) : (
                             <>
-                                <span>متابعة عملية الدفع</span>
+                                <span>تأكيد دفع {itemType === 'package' ? 'الحزمة' : 'الكورس'}</span>
                                 <HiHeart className="text-xl" />
                             </>
                         )}
                     </button>
-                    
-                    <div className="text-center">
-                        <p className="text-xs text-gray-400">
-                            بالضغط على "متابعة" سيتم توجيهك لصفحة الدفع الآمنة
-                        </p>
-                    </div>
-                </div>
-
-                {/* Security badges */}
-                <div className="bg-gray-500/10 rounded-xl p-4 text-center">
-                    <div className="flex items-center justify-center gap-4 mb-2">
-                        <div className="flex items-center gap-1">
-                            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                            <span className="text-xs text-green-400">SSL Secured</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                            <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                            <span className="text-xs text-blue-400">PCI Compliant</span>
-                        </div>
-                    </div>
-                    <p className="text-xs text-gray-400">
-                        🔒 جميع المعاملات محمية بأعلى معايير الأمان الدولية
-                    </p>
                 </div>
             </div>
         );
@@ -352,7 +345,12 @@ const Page = ({ params }) => {
                     <div className="text-center space-y-2">
                         <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 mx-auto rounded-full" />
                         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">إتمام عملية الشراء</h1>
-                        <p className="text-blue-400 text-sm sm:text-base">خطوة واحدة تفصلك عن بداية رحلتك العلمية</p>
+                        <p className="text-blue-400 text-sm sm:text-base">
+                            {itemType === 'package'
+                                ? 'خطوة واحدة تفصلك عن الاشتراك في حزمة الكورسات'
+                                : 'خطوة واحدة تفصلك عن بداية رحلتك العلمية'
+                            }
+                        </p>
                     </div>
 
                     {error ? (
@@ -364,32 +362,63 @@ const Page = ({ params }) => {
                                 </button>
                             </Link>
                         </div>
-                    ) : loading && !courseInfo ? (
+                    ) : loading && !itemData ? (
                         <div className="flex items-center justify-center min-h-[400px]">
                             <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent" />
                         </div>
-                    ) : courseInfo ? (
+                    ) : itemData ? (
                         <div className="grid md:grid-cols-5 gap-4 sm:gap-8">
-                            {/* Left Section: Course Details */}
+                            {/* Left Section: Item Details */}
                             <div dir='rtl' className="md:col-span-2 space-y-4 sm:space-y-6">
                                 <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
                                     <div className="space-y-4">
                                         <div className="flex items-center space-x-3 rtl:space-x-reverse">
                                             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center">
-                                                <GiMolecule className="text-2xl" />
+                                                {itemType === 'package' ? (
+                                                    <Package className="text-2xl" />
+                                                ) : (
+                                                    <GiMolecule className="text-2xl" />
+                                                )}
                                             </div>
                                             <div>
-                                                <h3 className="text-lg font-medium">{courseInfo.name}</h3>
-                                                <p className="text-blue-400 text-sm">مع أ/ حسام ميرة</p>
+                                                <h3 className="text-lg font-medium">{itemData.name}</h3>
+                                                <p className="text-blue-400 text-sm">
+                                                    {itemType === 'package' ? 'حزمة تعليمية' : 'مع د/ احمد السيد'}
+                                                </p>
                                             </div>
                                         </div>
 
                                         <div className="bg-gradient-to-r from-blue-500/10 to-indigo-500/10 rounded-xl p-4">
                                             <div className="flex justify-between items-center">
-                                                <span className="text-blue-400">سعر الكورس</span>
-                                                <span className="text-2xl font-bold">{courseInfo.price} جنيه</span>
+                                                <span className="text-blue-400">
+                                                    {itemType === 'package' ? 'سعر الحزمة' : 'سعر الكورس'}
+                                                </span>
+                                                <span className="text-2xl font-bold">{itemData.price} جنيه</span>
                                             </div>
+
+                                            {itemType === 'package' && itemData.originalPrice && (
+                                                <div className="flex justify-between items-center mt-2">
+                                                    <span className="text-blue-400">الخصم</span>
+                                                    <span className="text-emerald-400">
+                                                        {itemData.discountPercentage}% ({itemData.originalPrice - itemData.price} جنيه)
+                                                    </span>
+                                                </div>
+                                            )}
                                         </div>
+
+                                        {itemType === 'package' && itemData.courses && (
+                                            <div className="mt-4">
+                                                <h4 className="text-md font-medium mb-2">الكورسات المتضمنة:</h4>
+                                                <div className="space-y-2">
+                                                    {itemData.courses.map((course, index) => (
+                                                        <div key={index} className="bg-white/5 p-2 rounded-lg flex items-center">
+                                                            <BookOpen className="h-4 w-4 mr-2 text-blue-400" />
+                                                            <span className="text-sm">{course.name}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 

@@ -18,6 +18,7 @@ import NotFound from '../not-found';
 import AdminBooks from '../components/AdminBooks';
 import NotificationManagement from './components/NotificationManagement';
 import CoursesAnalyses from './components/CoursesAnalyses';
+import PackageManagement from './components/PackageManagement';
 
 
 export default function MathLMSAdmin() {
@@ -220,6 +221,10 @@ export default function MathLMSAdmin() {
 
                         {activeTab === 'analyses' && adminData.userRole === 'admin' && (
                             <CoursesAnalyses />
+                        )}
+
+                        {activeTab === 'packages' && adminData.userRole === 'admin' && (
+                            <PackageManagement />
                         )}
                     </main>
                 </div>

@@ -99,7 +99,14 @@ const SignInPage = () => {
 
                 // Redirect after a short delay to show the warning message
                 setTimeout(() => {
-                    router.replace("/");
+                    // Check if there's a redirect URL saved in localStorage
+                    const redirectUrl = localStorage.getItem('redirectAfterLogin');
+                    if (redirectUrl) {
+                        localStorage.removeItem('redirectAfterLogin'); // Clear the redirect URL
+                        router.replace(redirectUrl);
+                    } else {
+                        router.replace("/");
+                    }
                 }, data.wasLoggedOutFromOtherDevice ? 2000 : 100);
             } else {
                 // Check if user is banned
