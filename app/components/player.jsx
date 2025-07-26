@@ -140,17 +140,7 @@ const VideoPlayer = ({ videoUrl }) => {
   }
 
   return (
-    <div
-      ref={containerRef}
-      className={`${aspectClass} w-full h-full relative`}
-      style={{
-        willChange: 'transform',
-        backfaceVisibility: 'hidden',
-        WebkitBackfaceVisibility: 'hidden',
-        transform: 'translateZ(0)',
-        WebkitTransform: 'translateZ(0)'
-      }}
-    />
+    <div ref={containerRef} className={`${aspectClass} w-full h-full`} />
   );
 };
 
