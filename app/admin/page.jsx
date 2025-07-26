@@ -34,7 +34,7 @@ export default function MathLMSAdmin() {
 
     // Admin profile data
     const [adminData, setAdminData] = useState({
-        name: "احمد السيد",
+        name: " والتر وايت",
         email: "admin@math-lms.com",
         phoneNumber: "0123456789",
         role: "مسؤول النظام",
