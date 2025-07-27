@@ -787,7 +787,7 @@ const CoursePage = () => {
                             {/* Enhanced Video Player */}
                             <div className="relative group">
                                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-3xl blur-xl opacity-75 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                <div className="relative bg-black/90 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+                                <div className="relative w-full h-auto rounded-xl overflow-hidden bg-gray-900">
                                     <div className="aspect-video">
                                         {currentVideoUrl && !isContentLocked && isReady ? (
                                             <VideoPlayer videoUrl={currentVideoUrl} />
