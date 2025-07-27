@@ -156,12 +156,10 @@ const CoursePage = () => {
         }
     }, [courseid]);
 
-    /* End here */
-
     useEffect(() => {
         // Update the document title when courseInfo changes
         if (courseInfo.nameofcourse) {
-            document.title = `${courseInfo.nameofcourse} - منصة والتر وايت   `;
+            document.title = `${courseInfo.nameofcourse} - منصة حسام ميرة   `;
         }
     }, [courseInfo]);
 
@@ -231,7 +229,7 @@ const CoursePage = () => {
         return (
             <>
                 <Head>
-                    <title>جاري التحميل... -  والتر وايت </title>
+                    <title>جاري التحميل... -  حسام ميرة </title>
                 </Head>
                 <div dir='rtl' className="min-h-screen   text-white font-arabicUI3">
                     {/* Animated Background */}
@@ -388,7 +386,7 @@ const CoursePage = () => {
                                     {/* Enhanced Video Player Skeleton */}
                                     <div className="relative group">
                                         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-3xl blur-xl opacity-75 animate-pulse"></div>
-                                        <div className="relative bg-black/90 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/10">
+                                        <div className="relative w-full h-auto rounded-xl overflow-hidden bg-gray-900">
                                             <div className="aspect-video bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
                                                 <div className="text-center space-y-4">
                                                     <div className="w-24 h-24 mx-auto bg-white/5 rounded-2xl flex items-center justify-center animate-pulse">
@@ -505,7 +503,7 @@ const CoursePage = () => {
     return (
         <>
             <Head>
-                <title>{courseInfo.nameofcourse ? `${courseInfo.nameofcourse} - منصة والتر وايت   ` : 'منصة والتر وايت '}</title>
+                <title>{courseInfo.nameofcourse ? `${courseInfo.nameofcourse} - منصة حسام ميرة     ` : 'منصة حسام ميرة  '}</title>
                 {/* Add Plyr CSS */}
                 <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
                 {/* Add custom styling for Plyr */}
@@ -705,7 +703,7 @@ const CoursePage = () => {
                                                     <div className="relative w-20 h-20 rounded-2xl overflow-hidden border-2 border-white/20 shadow-xl">
                                                         <img
                                                             src="/prof.jpg"
-                                                            alt="د/ والتر وايت"
+                                                            alt="أ / حسام ميرة"
                                                             className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
                                                         />
                                                         {/* Professional Overlay */}
@@ -729,8 +727,7 @@ const CoursePage = () => {
                                                 <div className="space-y-2">
                                                     <h4 className="text-xl font-bold text-white flex items-center gap-2">
                                                         <span className="bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
-                                                            د/ والتر وايت
-                                                        </span>
+                                                            أ / حسام ميرة                                                        </span>
                                                         {/* Verification Badge */}
                                                         <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
                                                             <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -754,13 +751,13 @@ const CoursePage = () => {
                                                     </div>
                                                     <div className="flex flex-wrap gap-2">
                                                         <span className="px-2 py-1 bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-400/20 rounded-lg text-purple-300 text-xs font-medium">
-                                                            العضوية
+                                                            البحتة
                                                         </span>
                                                         <span className="px-2 py-1 bg-gradient-to-r from-blue-500/10 to-teal-500/10 border border-blue-400/20 rounded-lg text-blue-300 text-xs font-medium">
-                                                            الغير عضوية
+                                                            التطبيقية
                                                         </span>
                                                         <span className="px-2 py-1 bg-gradient-to-r from-teal-500/10 to-green-500/10 border border-teal-400/20 rounded-lg text-teal-300 text-xs font-medium">
-                                                            الفيزياء
+                                                            اخر
                                                         </span>
                                                     </div>
                                                 </div>
@@ -787,7 +784,7 @@ const CoursePage = () => {
                             {/* Enhanced Video Player */}
                             <div className="relative group">
                                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-3xl blur-xl opacity-75 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                <div className="relative w-full h-auto rounded-xl overflow-hidden bg-gray-900">
+                                <div className="relative bg-black/90 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
                                     <div className="aspect-video">
                                         {currentVideoUrl && !isContentLocked && isReady ? (
                                             <VideoPlayer videoUrl={currentVideoUrl} />
