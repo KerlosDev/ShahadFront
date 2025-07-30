@@ -160,6 +160,8 @@ export default function ChemistryLMSProfile({ searchParams }) {
         const nowDateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         const diffTime = nowDateOnly - joinDateOnly;
         const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+        
         if (diffDays === 0) return "اليوم";
         if (diffDays === 1) return "الأمس";
         if (diffDays < 7) return `منذ ${diffDays} أيام`;
