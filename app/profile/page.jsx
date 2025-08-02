@@ -161,7 +161,7 @@ export default function ChemistryLMSProfile({ searchParams }) {
         const diffTime = nowDateOnly - joinDateOnly;
         const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-        
+
         if (diffDays === 0) return "اليوم";
         if (diffDays === 1) return "الأمس";
         if (diffDays < 7) return `منذ ${diffDays} أيام`;
@@ -180,6 +180,13 @@ export default function ChemistryLMSProfile({ searchParams }) {
             // Get token from cookies
             const token = Cookies.get('token');
 
+            // Check if token exists
+            if (!token) {
+                // No token means user isn't logged in
+                setIsLoading(false);
+                return; // Exit early, the UI will show NoAccountMessage
+            }
+
             // Make request to the endpoint
             const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
                 headers: {
@@ -193,9 +200,21 @@ export default function ChemistryLMSProfile({ searchParams }) {
 
         } catch (err) {
             console.error('Error fetching user data:', err);
-            setError('فشل في تحميل بيانات المستخدم. يرجى المحاولة مرة أخرى.');
 
-            // Fallback to cookies data if API fails
+            // Check if error is due to authentication issues
+            if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+                // Clear any existing cookies to ensure proper logout
+                Cookies.remove('token');
+                Cookies.remove('username');
+                Cookies.remove('email');
+                Cookies.remove('phone');
+
+                // Don't set error message, the UI will show NoAccountMessage
+            } else {
+                setError('فشل في تحميل بيانات المستخدم. يرجى المحاولة مرة أخرى.');
+            }
+
+            // Fallback to cookies data if API fails but not for auth errors
             const storedUsername = Cookies.get('username');
             const storedEmail = Cookies.get('email');
             const storedPhone = Cookies.get('phone');
@@ -511,6 +530,32 @@ export default function ChemistryLMSProfile({ searchParams }) {
         return <ProfileContent />;
     };
 
+    // Check if user has a valid account
+    const hasAccount = !!(userData && userData.name && userData.email);
+
+    // No Account Component
+    const NoAccountMessage = () => (
+        <div className={`flex flex-col items-center justify-center h-[70vh] text-center ${isDarkMode ? 'bg-white/10 text-white' : 'bg-white/80 text-gray-900 border border-gray-200'} backdrop-blur-xl rounded-2xl p-8 shadow-lg`}>
+            <div className="mb-8">
+                <div className={`h-24 w-24 mx-auto rounded-full ${isDarkMode ? 'bg-blue-500/30' : 'bg-blue-100'} flex items-center justify-center mb-6`}>
+                    <User size={40} className={`${isDarkMode ? 'text-white' : 'text-blue-600'}`} />
+                </div>
+                <h2 className="text-3xl font-bold mb-4">لم يتم العثور على حساب</h2>
+                <p className={`mb-6 text-lg ${isDarkMode ? 'text-white/70' : 'text-gray-600'}`}>
+                    يبدو أنك غير مسجل في المنصة أو قد تم تسجيل خروجك. يرجى تسجيل الدخول أو إنشاء حساب جديد للوصول إلى صفحة الملف الشخصي.
+                </p>
+            </div>
+            <div className="flex flex-wrap gap-4 justify-center">
+                <a href="/sign-in" className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all transform hover:scale-105">
+                    تسجيل الدخول
+                </a>
+                <a href="/sign-up" className={`px-6 py-3 rounded-xl shadow-md transition-all transform hover:scale-105 ${isDarkMode ? 'bg-white/20 text-white hover:bg-white/30' : 'bg-white text-blue-600 border border-blue-200 hover:bg-gray-50'}`}>
+                    إنشاء حساب جديد
+                </a>
+            </div>
+        </div>
+    );
+
     return (
         <div className={`min-h-screen font-arabicUI3 relative transition-colors duration-300 ${isDarkMode ? ' ' : 'bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50'}`} dir="rtl">
             {/* Chemistry Background */}
@@ -526,7 +571,7 @@ export default function ChemistryLMSProfile({ searchParams }) {
                     <div className={`${isDarkMode ? 'bg-red-500/20 text-white' : 'bg-red-100 text-red-800 border border-red-200'} backdrop-blur-xl rounded-xl p-4 text-center`}>
                         {error}
                     </div>
-                ) : (
+                ) : hasAccount ? (
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                         {/* Left Sidebar - User Navigation */}
                         <Sidebar />
@@ -536,6 +581,8 @@ export default function ChemistryLMSProfile({ searchParams }) {
                             <MainContent />
                         </div>
                     </div>
+                ) : (
+                    <NoAccountMessage />
                 )}
             </div>
 
