@@ -49,8 +49,8 @@ export default function ExamAnalysis() {
 
     // Analytics Data
     const [questionsList, setQuestionsList] = useState([]);
-    
-    
+
+
     // Comparison Data
     const [comparisonType, setComparisonType] = useState('time');
     const [compareExam1, setCompareExam1] = useState('');
@@ -101,6 +101,7 @@ export default function ExamAnalysis() {
         { name: 'ضعيف (أقل من 60)', value: 0, color: '#F44336' }
     ]);
     const [availableExams, setAvailableExams] = useState([]);
+    const [examOptionsMap, setExamOptionsMap] = useState([]);
     const [studentsByExam, setStudentsByExam] = useState([]);
     const [topPerformers, setTopPerformers] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -189,41 +190,41 @@ export default function ExamAnalysis() {
         }
     };
 
-   // Replace the existing fetchStudentsByExam function with this:
-const fetchStudentsByExam = async (examId) => {
-    if (!examId || examId === 'all') {
-        setStudentsByExam([]);
-        return;
-    }
-
-    setStudentListLoading(true);
-    try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`http://192.168.1.3:9000/examResult/by-exam-id/${examId}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        if (data.success) {
-            setStudentsByExam(data.data);
-        } else {
-            console.error('Failed to fetch students:', data.error);
+    // Replace the existing fetchStudentsByExam function with this:
+    const fetchStudentsByExam = async (examId) => {
+        if (!examId || examId === 'all') {
             setStudentsByExam([]);
+            return;
         }
-    } catch (error) {
-        console.error('Error fetching students by exam:', error);
-        setStudentsByExam([]);
-    } finally {
-        setStudentListLoading(false);
-    }
-};
+
+        setStudentListLoading(true);
+        try {
+            const token = Cookies.get('token');
+            const response = await fetch(`http://192.168.1.3:9000/examResult/by-exam/${examId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            if (data.success) {
+                setStudentsByExam(data.data);
+            } else {
+                console.error('Failed to fetch students:', data.error);
+                setStudentsByExam([]);
+            }
+        } catch (error) {
+            console.error('Error fetching students by exam:', error);
+            setStudentsByExam([]);
+        } finally {
+            setStudentListLoading(false);
+        }
+    };
 
     // Add a function to fetch students by exam ID
     const fetchStudentsByExamId = async (examId) => {
@@ -231,7 +232,7 @@ const fetchStudentsByExam = async (examId) => {
         try {
             const token = Cookies.get('token');
 
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/examResult/by-exam-id/${examId}`, {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/examResult/by-exam/${examId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
