@@ -82,7 +82,10 @@ const CoursePage = () => {
                     image: course.imageUrl || '/pi.png',
                     nicknameforcourse: courseid,
                     _id: course._id,
-                    isEnrolled: isEnrolled // Add enrollment status to courseInfo
+                    isEnrolled: isEnrolled, // Add enrollment status to courseInfo
+                    courseLink: course.courseLink || { name: '', url: '' } // Add course link
+
+
                 });
 
                 // Set enrollment status
@@ -636,6 +639,22 @@ const CoursePage = () => {
                                             <span className="text-emerald-300 font-semibold">مشترك بالفعل</span>
                                         </div>
                                     )}
+                                    {/* Course Link */}
+                                    {courseInfo.courseLink && courseInfo.courseLink.name && courseInfo.courseLink.url && (
+                                        <div className="inline-flex items-center gap-3 bg-blue-500/20 backdrop-blur-md px-4 py-3 rounded-xl border border-blue-400/30 shadow-lg">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                            </svg>
+                                            <a
+                                                href={courseInfo.courseLink.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-blue-300 font-semibold hover:text-blue-200 transition-colors"
+                                            >
+                                                {courseInfo.courseLink.name}
+                                            </a>
+                                        </div>
+                                    )}
 
                                     {/* Course Stats */}
                                     <div className="flex items-center gap-6 text-gray-400">
@@ -1029,6 +1048,55 @@ const CoursePage = () => {
                                     </div>
                                 </div>
 
+                                {/* Course Link Section - Visible to all but URL only for enrolled */}
+                                {courseInfo.courseLink && courseInfo.courseLink.name && (
+                                    <div className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
+                                        <div className="bg-gradient-to-r from-blue-600/20 to-cyan-600/20 p-6 border-b border-white/10">
+                                            <h3 className="text-xl font-bold text-white flex items-center gap-3">
+                                                <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                                    </svg>
+                                                </div>
+                                                روابط الكورس
+                                            </h3>
+                                        </div>
+                                        <div className="p-6">
+                                            {isEnrolled && courseInfo.courseLink.url ? (
+                                                // For enrolled users: Show clickable link with URL
+                                                <a
+                                                    href={courseInfo.courseLink.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="flex items-center gap-4 p-4 rounded-xl transition-all duration-300 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 hover:from-blue-500/20 hover:to-cyan-500/20 border border-blue-400/20 hover:border-blue-400/40"
+                                                >
+                                                    <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-blue-500/20">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                                        </svg>
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <h4 className="text-white font-semibold mb-1">{courseInfo.courseLink.name}</h4>
+                                                        <p className="text-blue-300 text-sm truncate">{courseInfo.courseLink.url}</p>
+                                                    </div>
+                                                </a>
+                                            ) : (
+                                                // For non-enrolled users: Show non-clickable link with lock icon
+                                                <div className="flex items-center gap-4 p-4 rounded-xl bg-gray-700/30 border border-gray-600/30">
+                                                    <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-gray-700/50">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                                        </svg>
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <h4 className="text-white font-semibold mb-1">{courseInfo.courseLink.name}</h4>
+                                                        <p className="text-gray-400 text-sm">اشترك في الكورس للوصول إلى الرابط</p>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
                                 {/* Enhanced Quiz Section */}
                                 <div className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
                                     <div className="bg-gradient-to-r from-orange-600/20 to-red-600/20 p-6 border-b border-white/10">

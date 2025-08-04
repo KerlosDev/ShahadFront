@@ -4,11 +4,14 @@ import axios from 'axios';
 import {
     FaEdit, FaTrash, FaPlus, FaSave, FaTimes, FaBook, FaVideo,
     FaQuestionCircle, FaSearch, FaFilter, FaBookmark, FaCopy, FaUpload,
-    FaGraduationCap, FaListUl, FaArchive, FaClock, FaCheck, FaArrowLeft
+    FaGraduationCap, FaListUl, FaArchive, FaClock, FaCheck, FaArrowLeft,
+    FaFile,
+    FaFileAlt
 } from 'react-icons/fa';
 import { HiOutlineUserGroup, HiOutlineClock, HiOutlineChartBar } from 'react-icons/hi';
 import { toast } from 'react-toastify';
 import { motion, AnimatePresence } from 'framer-motion';
+import BunnyStreamUploader from './BunnyStreamUploader';
 
 import Cookies from 'js-cookie';
 
@@ -30,7 +33,9 @@ const CourseManager = () => {
         isDraft: false,
         isScheduled: false,
         scheduledPublishDate: '',
-        publishStatus: 'draft'
+        publishStatus: 'draft',
+        courseLinkName: '',
+        courseLinkUrl: ''
     });
     const [uploadProgress, setUploadProgress] = useState(0);
     const [selectedCourse, setSelectedCourse] = useState(null);
@@ -51,6 +56,7 @@ const CourseManager = () => {
     const [editingChapter, setEditingChapter] = useState(null);
     const [editingLesson, setEditingLesson] = useState(null);
     const [lessonInputs, setLessonInputs] = useState({});
+    const [showVideoUploader, setShowVideoUploader] = useState({});
     const [processingStatus, setProcessingStatus] = useState({
         show: false,
         step: 0,
@@ -172,6 +178,8 @@ const CourseManager = () => {
             formData.append('isScheduled', newCourse.isScheduled);
             formData.append('scheduledPublishDate', newCourse.scheduledPublishDate);
             formData.append('publishStatus', newCourse.publishStatus);
+            formData.append('courseLinkName', newCourse.courseLinkName || '');
+            formData.append('courseLinkUrl', newCourse.courseLinkUrl || '');
             formData.append("exams", JSON.stringify(selectedExams.map(exam => exam._id)));
 
             if (newCourse.imageFile) {
@@ -217,7 +225,9 @@ const CourseManager = () => {
                     isDraft: false,
                     isScheduled: false,
                     scheduledPublishDate: '',
-                    publishStatus: 'draft'
+                    publishStatus: 'draft',
+                    courseLinkName: '',
+                    courseLinkUrl: ''
                 });
                 setUploadProgress(0);
                 fetchCourses();
@@ -270,7 +280,9 @@ const CourseManager = () => {
                 isDraft: data.isDraft ?? false,
                 isScheduled: data.isScheduled ?? false,
                 scheduledPublishDate: data.scheduledPublishDate || '',
-                publishStatus: data.publishStatus || 'draft'
+                publishStatus: data.publishStatus || 'draft',
+                courseLinkName: data.courseLink?.name || '',
+                courseLinkUrl: data.courseLink?.url || ''
             });
             setSelectedExams(data.exams || []);
             setCurrentStep(1); // Reset to first step when opening a course
@@ -393,6 +405,11 @@ const CourseManager = () => {
             videoUrl: lessonInput.videoUrl,
             fileName: lessonInput.fileName || '',
             fileUrl: lessonInput.fileUrl || '',
+            // Bunny Stream fields
+            bunnyStreamVideoId: lessonInput.bunnyStreamVideoId || '',
+            thumbnailUrl: lessonInput.thumbnailUrl || '',
+            hlsUrl: lessonInput.hlsUrl || '',
+            videoStatus: lessonInput.videoStatus || 'ready'
         };
 
         try {
@@ -403,7 +420,16 @@ const CourseManager = () => {
 
             setLessonInputs(prev => ({
                 ...prev,
-                [chapterId]: { title: '', videoUrl: '', fileName: '', fileUrl: '' }
+                [chapterId]: {
+                    title: '',
+                    videoUrl: '',
+                    fileName: '',
+                    fileUrl: '',
+                    bunnyStreamVideoId: '',
+                    thumbnailUrl: '',
+                    hlsUrl: '',
+                    videoStatus: 'ready'
+                }
             }));
         } catch (error) {
             console.error('Error adding lesson:', error);
@@ -796,10 +822,10 @@ const CourseManager = () => {
                     onChange={(e) => setFilter(e.target.value)}
                     className="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all [&>option]:text-black"
                 >
-                    <option className=' text-black'  value="all">جميع الكورسات</option>
-                    <option  className=' text-black' value="active">الكورسات النشطة</option>
-                    <option   className=' text-black'value="draft">المسودات</option>
-                    <option   className=' text-black' value="scheduled">المجدولة للنشر</option>
+                    <option className=' text-black' value="all">جميع الكورسات</option>
+                    <option className=' text-black' value="active">الكورسات النشطة</option>
+                    <option className=' text-black' value="draft">المسودات</option>
+                    <option className=' text-black' value="scheduled">المجدولة للنشر</option>
                 </select>
             </div>
 
@@ -833,7 +859,7 @@ const CourseManager = () => {
                                             'bg-yellow-500/20 text-yellow-300 border-yellow-400/30 group-hover:bg-yellow-500/30' :
                                             'bg-emerald-500/20 text-emerald-300 border-emerald-400/30 group-hover:bg-emerald-500/30'}`}>
                                     <span className={`w-2 h-2 rounded-full animate-pulse ${course.publishStatus === 'scheduled' ? 'bg-purple-400' :
-                                            course.isDraft ? 'bg-yellow-400' : 'bg-emerald-400'
+                                        course.isDraft ? 'bg-yellow-400' : 'bg-emerald-400'
                                         }`}></span>
                                     {course.publishStatus === 'scheduled' ? 'مجدول' :
                                         course.isDraft ? 'مسودة' : 'منشور'}
@@ -1013,13 +1039,38 @@ const CourseManager = () => {
                                                              focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all"
                                                     required
                                                 >
-                                                    <option   className=' text-black' value="">اختر المستوى</option>
+                                                    <option className=' text-black' value="">اختر المستوى</option>
                                                     <option className=' text-black' value="الصف الأول الثانوي">الصف الأول الثانوي</option>
-                                                    <option  className=' text-black' value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
-                                                    <option  className=' text-black' value="الصف الثالث الثانوي">الصف الثالث الثانوي</option>
+                                                    <option className=' text-black' value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
+                                                    <option className=' text-black' value="الصف الثالث الثانوي">الصف الثالث الثانوي</option>
                                                 </select>
                                             </div>
 
+                                            {/* Course Link Name */}
+                                            <div className="space-y-2">
+                                                <label className="text-sm font-arabicUI3 text-gray-400">اسم الرابط</label>
+                                                <input
+                                                    type="text"
+                                                    value={newCourse.courseLinkName}
+                                                    onChange={(e) => setNewCourse({ ...newCourse, courseLinkName: e.target.value })}
+                                                    className="w-full p-3 bg-white/5 border border-white/10 rounded-xl text-white 
+                                                             focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                                                    placeholder="مثال: رابط الواتساب"
+                                                />
+                                            </div>
+
+                                            {/* Course Link URL */}
+                                            <div className="space-y-2">
+                                                <label className="text-sm font-arabicUI3 text-gray-400">رابط الكورس</label>
+                                                <input
+                                                    type="url"
+                                                    value={newCourse.courseLinkUrl}
+                                                    onChange={(e) => setNewCourse({ ...newCourse, courseLinkUrl: e.target.value })}
+                                                    className="w-full p-3 bg-white/5 border border-white/10 rounded-xl text-white 
+                                                             focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                                                    placeholder="https://example.com"
+                                                />
+                                            </div>
                                             {/* Course Description */}
                                             <div className="md:col-span-2 space-y-2">
                                                 <label className="text-sm font-arabicUI3 text-gray-400">وصف الكورس</label>
@@ -1156,14 +1207,13 @@ const CourseManager = () => {
                                                                             )}
                                                                         </div>
                                                                         <div className="flex items-center gap-2">
-                                                                            <button 
-                                                                                type="button" 
+                                                                            <button
+                                                                                type="button"
                                                                                 onClick={() => handleToggleLessonFree(chapter._id, lesson._id, !lesson.isFree)}
-                                                                                className={`p-1.5 rounded-lg transition-colors ${
-                                                                                    lesson.isFree 
-                                                                                        ? 'text-green-400 hover:bg-green-500/10' 
-                                                                                        : 'text-gray-400 hover:bg-gray-500/10'
-                                                                                }`}
+                                                                                className={`p-1.5 rounded-lg transition-colors ${lesson.isFree
+                                                                                    ? 'text-green-400 hover:bg-green-500/10'
+                                                                                    : 'text-gray-400 hover:bg-gray-500/10'
+                                                                                    }`}
                                                                                 title={lesson.isFree ? 'إلغاء المجاني' : 'جعل مجاني'}
                                                                             >
                                                                                 <FaBookmark size={12} />
@@ -1187,13 +1237,52 @@ const CourseManager = () => {
                                                                         placeholder="عنوان الدرس"
                                                                         className="flex-1 p-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm"
                                                                     />
-                                                                    <input
-                                                                        type="text"
-                                                                        value={lessonInputs[chapter._id]?.videoUrl || ''}
-                                                                        onChange={(e) => setLessonInputs(prev => ({ ...prev, [chapter._id]: { ...prev[chapter._id], videoUrl: e.target.value } }))}
-                                                                        placeholder="رابط الفيديو"
-                                                                        className="flex-1 p-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm"
-                                                                    />
+
+                                                                    {/* Video Input Section */}
+                                                                    <div className="space-y-2">
+                                                                        <div className="flex gap-2">
+                                                                            <input
+                                                                                type="text"
+                                                                                value={lessonInputs[chapter._id]?.videoUrl || ''}
+                                                                                onChange={(e) => setLessonInputs(prev => ({ ...prev, [chapter._id]: { ...prev[chapter._id], videoUrl: e.target.value } }))}
+                                                                                placeholder="رابط الفيديو"
+                                                                                className="flex-1 p-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm"
+                                                                            />
+                                                                            <button
+                                                                                type="button"
+                                                                                onClick={() => setShowVideoUploader(prev => ({ ...prev, [chapter._id]: !prev[chapter._id] }))}
+                                                                                className="px-3 py-2 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 rounded-lg transition-colors flex items-center gap-1 text-sm"
+                                                                            >
+                                                                                <FaUpload size={12} />
+                                                                                رفع فيديو
+                                                                            </button>
+                                                                        </div>
+
+                                                                        {/* Bunny Stream Uploader */}
+                                                                        {showVideoUploader[chapter._id] && (
+                                                                            <div className="bg-gray-800/30 rounded-lg p-3 border border-white/5">
+                                                                                <BunnyStreamUploader
+                                                                                    lessonTitle={lessonInputs[chapter._id]?.title || ''}
+                                                                                    currentVideoUrl={lessonInputs[chapter._id]?.videoUrl || ''}
+                                                                                    onVideoUploaded={(videoData) => {
+                                                                                        setLessonInputs(prev => ({
+                                                                                            ...prev,
+                                                                                            [chapter._id]: {
+                                                                                                ...prev[chapter._id],
+                                                                                                videoUrl: videoData.videoUrl,
+                                                                                                hlsUrl: videoData.hlsUrl,
+                                                                                                thumbnailUrl: videoData.thumbnailUrl,
+                                                                                                bunnyStreamVideoId: videoData.bunnyStreamVideoId,
+                                                                                                videoStatus: videoData.videoStatus
+                                                                                            }
+                                                                                        }));
+                                                                                        setShowVideoUploader(prev => ({ ...prev, [chapter._id]: false }));
+                                                                                    }}
+                                                                                />
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+
                                                                     <input
                                                                         type="text"
                                                                         value={lessonInputs[chapter._id]?.fileName || ''}
@@ -1585,13 +1674,48 @@ const CourseManager = () => {
                                 className="w-full p-3 bg-white/5 border border-white/10 rounded-xl text-white"
                                 placeholder="عنوان الدرس"
                             />
-                            <input
-                                type="text"
-                                value={editingLesson.videoUrl || ""}
-                                onChange={(e) => setEditingLesson({ ...editingLesson, videoUrl: e.target.value })}
-                                className="w-full p-3 bg-white/5 border border-white/10 rounded-xl text-white"
-                                placeholder="رابط الفيديو"
-                            />
+
+                            {/* Video Input Section */}
+                            <div className="space-y-2">
+                                <div className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        value={editingLesson.videoUrl || ""}
+                                        onChange={(e) => setEditingLesson({ ...editingLesson, videoUrl: e.target.value })}
+                                        className="flex-1 p-3 bg-white/5 border border-white/10 rounded-xl text-white"
+                                        placeholder="رابط الفيديو"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowVideoUploader(prev => ({ ...prev, [`edit_${editingLesson._id}`]: !prev[`edit_${editingLesson._id}`] }))}
+                                        className="px-3 py-3 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 rounded-xl transition-colors flex items-center gap-1"
+                                    >
+                                        <FaUpload size={14} />
+                                        تغيير الفيديو
+                                    </button>
+                                </div>
+
+                                {/* Bunny Stream Uploader */}
+                                {showVideoUploader[`edit_${editingLesson._id}`] && (
+                                    <div className="bg-gray-800/30 rounded-lg p-3 border border-white/5">
+                                        <BunnyStreamUploader
+                                            lessonTitle={editingLesson.title || ''}
+                                            currentVideoUrl={editingLesson.videoUrl || ''}
+                                            onVideoUploaded={(videoData) => {
+                                                setEditingLesson(prev => ({
+                                                    ...prev,
+                                                    videoUrl: videoData.videoUrl,
+                                                    hlsUrl: videoData.hlsUrl,
+                                                    thumbnailUrl: videoData.thumbnailUrl,
+                                                    bunnyStreamVideoId: videoData.bunnyStreamVideoId,
+                                                    videoStatus: videoData.videoStatus
+                                                }));
+                                                setShowVideoUploader(prev => ({ ...prev, [`edit_${editingLesson._id}`]: false }));
+                                            }}
+                                        />
+                                    </div>
+                                )}
+                            </div>
                             <input
                                 type="text"
                                 value={editingLesson.fileName || ""}
