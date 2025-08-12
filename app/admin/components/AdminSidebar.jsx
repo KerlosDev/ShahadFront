@@ -99,7 +99,7 @@ export default function AdminSidebar({ activeTab, setActiveTab, adminData, showL
             roles: ['admin'] // Only admin can access settings
         },
         {
-            id: 12,
+            id: 13,
             label: "إدارة الحزم",
             icon: <BsBoxSeam size={20} />,
             tab: 'packages',
