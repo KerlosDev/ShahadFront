@@ -106,7 +106,7 @@ const OfferModal = memo(({ isEdit, onSubmit, onClose, currentStep, steps, formDa
                                                 value={formData.subtitle}
                                                 onChange={(e) => onFormChange('subtitle', e.target.value)}
                                                 className={`w-full px-4 py-3 bg-white/5 border ${formErrors.subtitle ? 'border-red-500' : 'border-white/10'} rounded-xl text-white`}
-                                                placeholder="مثال: والتر وايت يقدم"
+                                                placeholder="مثال:  شهد هاني يقدم"
                                             />
                                             {formErrors.subtitle && <p className="text-red-500 text-sm">{formErrors.subtitle}</p>}
                                         </div>

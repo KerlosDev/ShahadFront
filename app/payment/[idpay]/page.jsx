@@ -383,7 +383,7 @@ const Page = ({ params }) => {
                                             <div>
                                                 <h3 className="text-lg font-medium">{itemData.name}</h3>
                                                 <p className="text-blue-400 text-sm">
-                                                    {itemType === 'package' ? 'حزمة تعليمية' : 'مع د/ والتر وايت '}
+                                                    {itemType === 'package' ? 'حزمة تعليمية' : 'مع د/ شهد هاني  '}
                                                 </p>
                                             </div>
                                         </div>

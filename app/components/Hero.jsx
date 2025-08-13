@@ -40,7 +40,7 @@ const Hero = () => {
                                 className="relative z-10 w-full h-[500px] sm:h-auto max-w-lg mx-auto 
                                          object-contain sm:object-cover drop-shadow-2xl 
                                          hover:scale-102 transition-transform duration-300"
-                                alt="Walter Image"
+                                alt="Shahad Image"
                             />
                         </div>
                     </div>
@@ -71,8 +71,7 @@ const Hero = () => {
                                                      bg-gradient-to-l from-blue-600 via-purple-600 to-blue-800 
                                                      bg-clip-text text-transparent font-bold 
                                                      drop-shadow-lg group-hover:scale-105 transition-transform duration-300">
-                                            والتر وايت
-                                        </h1>                                        <div className="hidden sm:flex w-12 h-12 bg-gradient-to-br from-yellow-500/30 to-red-500/30 
+شهد هاني                                        </h1>                                        <div className="hidden sm:flex w-12 h-12 bg-gradient-to-br from-yellow-500/30 to-red-500/30 
                                                       rounded-full items-center justify-center group-hover:scale-110 
                                                       transition-transform duration-300">
                                             <TbCertificate className="text-2xl text-yellow-600 animate-pulse" />

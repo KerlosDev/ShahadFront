@@ -164,7 +164,7 @@ const CoursePage = () => {
     useEffect(() => {
         // Update the document title when courseInfo changes
         if (courseInfo.nameofcourse) {
-            document.title = `${courseInfo.nameofcourse} - منصة والتر وايت   `;
+            document.title = `${courseInfo.nameofcourse} - منصة شهد هاني  `;
         }
     }, [courseInfo]);
 
@@ -234,7 +234,7 @@ const CoursePage = () => {
         return (
             <>
                 <Head>
-                    <title>جاري التحميل... -  والتر وايت </title>
+                    <title>جاري التحميل... -  شهد هاني </title>
                 </Head>
                 <div dir='rtl' className="min-h-screen   text-white font-arabicUI3">
                     {/* Animated Background */}
@@ -508,7 +508,7 @@ const CoursePage = () => {
     return (
         <>
             <Head>
-                <title>{courseInfo.nameofcourse ? `${courseInfo.nameofcourse} - منصة والتر وايت   ` : 'منصة والتر وايت '}</title>
+                <title>{courseInfo.nameofcourse ? `${courseInfo.nameofcourse} - منصة شهد هاني  ` : 'منصة شهد هاني  '}</title>
                 {/* Add Plyr CSS */}
                 <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
                 {/* Add custom styling for Plyr */}
@@ -724,7 +724,7 @@ const CoursePage = () => {
                                                     <div className="relative w-20 h-20 rounded-2xl overflow-hidden border-2 border-white/20 shadow-xl">
                                                         <img
                                                             src="/prof.jpg"
-                                                            alt="د/ والتر وايت"
+                                                            alt="د/ شهد هاني"
                                                             className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
                                                         />
                                                         {/* Professional Overlay */}
@@ -748,7 +748,7 @@ const CoursePage = () => {
                                                 <div className="space-y-2">
                                                     <h4 className="text-xl font-bold text-white flex items-center gap-2">
                                                         <span className="bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
-                                                            د/ والتر وايت
+                                                            د/ شهد هاني
                                                         </span>
                                                         {/* Verification Badge */}
                                                         <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">

@@ -269,11 +269,11 @@ const Header = () => {
                                              group-hover:from-blue-600 group-hover:to-blue-800 
                                              dark:group-hover:from-blue-400 dark:group-hover:to-blue-300
                                              transition-all duration-300">
-                                    والتر وايت
+                                    شهد هاني 
                                 </h2>
                                 <span className="text-sm lg:text-base text-slate-500 dark:text-slate-400 font-arabicUI2
                                                group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                                    مدرس الكيمياء المتقدمة
+                                    مدرسة الكيمياء 
                                 </span>
                             </div>
                         </div>
@@ -588,7 +588,7 @@ const Header = () => {
                                 </div>
                                 <div>
                                     <h3 className="text-lg font-arabicUI2 font-bold text-slate-800 dark:text-white">
-                                        والتر وايت
+                                        شهد هاني 
                                     </h3>
                                     <p className="text-sm text-slate-600 dark:text-slate-300 font-arabicUI3">
                                         القائمة الرئيسية

@@ -31,7 +31,7 @@ const abrilFatface = Abril_Fatface({
 });
 
 export const metadata = {
-  title: "والتر وايت | Walter White",
+  title: "شهد هاني  | Shahad Hany",
   description: " شرح وحل تمارين مادة الكيمياء لطلاب الصفوف الثانوية الثلاثة بكل بساطة ",
 };
 
